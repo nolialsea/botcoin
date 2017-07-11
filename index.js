@@ -23,23 +23,21 @@ THE SOFTWARE.
 
 */
 
-var irc = require('irc');
-var fs = require('fs');
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('db.db');
+let irc = require('irc');
+let fs = require('fs');
+let sqlite3 = require('sqlite3').verbose();
+let db = new sqlite3.Database('db.db');
 let sqlTimestamp = "strftime('%s','now')";
+let channels = ['#cbna'];
+let nickname = 'BotCoin';
+let shortnick = 'bc';
 
 //Database initialisation
 db.serialize(function() {
     db.run("CREATE TABLE IF NOT EXISTS User (login TEXT, password TEXT, nick TEXT, gold REAL, lastMining INTEGER)");
 });
 
-//Global vars
-var channels = ['#cbna'];
-var nickname = 'BotCoin';
-var shortnick = 'bc';
-
-var client = new irc.Client('irc.mibbit.net', nickname, {
+let client = new irc.Client('irc.mibbit.net', nickname, {
     userName: 'NoliBot',
     realName: 'The Real NoliBot',
     port: 6667,
