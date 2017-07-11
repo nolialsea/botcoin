@@ -11,3 +11,4 @@ The project is still WIP, you can submit ideas for new features here : https://g
 - register LOGIN PASSWORD
 - connect LOGIN PASSWORD
 - create pickaxe INVESTMENT NAME (where INVESTMENT is a positive floating number)
+You can only have one pickaxe, and creating a new one delete the actual one.
