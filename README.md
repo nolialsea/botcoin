@@ -5,7 +5,7 @@ The project is still WIP, you can submit ideas for new features here : https://g
 
 ## Channel comamnds
 ### bc mine
-Gives between 0 and 1 gold per day (without pickaxe). The amount of gold is based on the amount of time you didn't mine, so it's useless to spam it.
+Gives between 0 and 1 gold per day (without pickaxe). The amount of gold is based on the amount of time since you last mined, so it's useless to spam it.
 ### bc help
 Shows the commands
 ## Private commands (/msg BotCoin COMMAND)
