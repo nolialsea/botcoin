@@ -29,7 +29,7 @@ const irc = require('irc'),
 	sqlite3 = require('sqlite3'),
 	db = new sqlite3.Database('db.db'),
 	sqlTimestamp = "strftime('%s','now')",
-	channels = ['#nolichan'],
+	channels = ['#cbna'],
 	nickname = 'BotCoin',
 	shortnick = 'bc',
 	minimumDelta = 60	//Minimum time between minings in seconds
@@ -37,6 +37,7 @@ const irc = require('irc'),
 //Database initialisation
 db.serialize(function() {
     db.run("CREATE TABLE IF NOT EXISTS User (login TEXT, password TEXT, nick TEXT, gold REAL, lastMining INTEGER)");
+    db.run("CREATE TABLE IF NOT EXISTS Pickaxe (name TEXT, power REAL, durability REAL, userId INTEGER)");
 });
 
 let client = new irc.Client('irc.mibbit.net', nickname, {
@@ -53,7 +54,7 @@ let client = new irc.Client('irc.mibbit.net', nickname, {
     selfSigned: false,
     certExpired: false,
     floodProtection: true,
-    floodProtectionDelay: 1000,
+    floodProtectionDelay: 500,
     sasl: false,
     retryCount: 0,
     retryDelay: 2000,
@@ -66,16 +67,22 @@ let client = new irc.Client('irc.mibbit.net', nickname, {
 client.addListener('message#', function (nick, channel, message) {
     console.log('['+channel + '] => ' + nick + ' : ' + message);
 
-    let regMine = new RegExp("^"+shortnick+" mine","i");
-    let res = message.match(regMine);
+    let res,
+    	regMine = new RegExp("^"+shortnick+" mine","i"),
+    	regHelp = new RegExp("^"+shortnick+" help$","i");
+
+    //Mining
+    res = message.match(regMine);
     if (res){
     	mine(nick);
+    	return;
     }
 
-    let regHelp = new RegExp("^"+shortnick+" help","i");
+    //Help
     res = message.match(regHelp);
     if (res){
         help();
+        return;
     }
 });
 
@@ -83,7 +90,8 @@ client.addListener('pm', function (nick, message) {
     //console.log('[PRIVATE] => ' + nick + ' : ' + message);
     let res,
     	regConnect = new RegExp("^connect ([^ ]*) ([^ ]*$)","i"),
-    	regRegister = new RegExp("^register ([^ ]*) ([^ ]*$)","i");
+    	regRegister = new RegExp("^register ([^ ]*) ([^ ]*$)","i"),
+    	regCreatePickaxe = new RegExp("^create pickaxe (([0-9]*[.])?[0-9]+) ([^]*)","i");
     
     //Connection
 	res = message.match(regConnect);
@@ -93,6 +101,7 @@ client.addListener('pm', function (nick, message) {
         }else{
             client.say(nick, "Error ! Use like this : \"connect LOGIN PASSWORD\"");
         }
+        return;
     }
 
     //Registration
@@ -103,6 +112,19 @@ client.addListener('pm', function (nick, message) {
         }else{
             client.say(nick, "Error ! Use like this : \"register LOGIN PASSWORD\"");
         }
+        return;
+    }
+
+    //Create pickaxe
+    res = message.match(regCreatePickaxe);
+    if (res){
+    	console.log(res);
+    	if (res.length === 4){
+    		createPickaxe(nick, res[1], res[3]);
+    	}else{
+    		client.say(nick, "Error ! Use like this : \"create pickaxe INVESTMENT NAME\"");
+    	}
+        return;
     }
 });
 
@@ -133,10 +155,27 @@ client.addListener('error', function(message) {
     console.log('error: ', message);
 });
 
+function createPickaxe(nick, investment, name){
+	User.getByNick(nick, function(user){
+		if (user !== undefined){
+			if (user.gold >= investment){
+				User.addGold(nick, -investment);
+				const power = Math.random()*investment;
+				const durability = Math.random()*investment;
+				Pickaxe.create(name, power, durability, user.id);
+				client.say(nick, "You created ["+name+"] ! Power : "+power+" | durability : "+durability+"");
+			}else{
+				client.say(nick, "You don't have enough gold");
+			}
+		}
+	});
+}
+
 function help(){
     client.say(channels[0], "Private commands (use \"/msg BotCoin COMMAND\") :");
     client.say(channels[0], "    register LOGIN PASSWORD");
     client.say(channels[0], "    connect LOGIN PASSWORD");
+    client.say(channels[0], "    create pickaxe INVESTMENT NAME");
     client.say(channels[0], "Channel commands :");
     client.say(channels[0], "    "+shortnick+" help");
     client.say(channels[0], "    "+shortnick+" mine");
@@ -147,24 +186,60 @@ function mine(nick){
         if (user === undefined){
             client.say(nick, "You are not logged in");
         }else{
-        	const delta = Math.floor(Date.now()/1000) - user.lastMining;
-        	//Mining
-            if (delta >= minimumDelta){
-            	const rand = Math.random();
-            	const gold = rand * (delta/86400);	//Max 1 per day
-                User.addGold(nick, gold);
-                client.say(channels[0], nick+" found "+gold+"g of gold ("+(delta/60).toFixed(2)+" minute(s) at "+(rand*100).toFixed(2)+"% rate) ! Total gold for "+nick+" : "+(user.gold+gold));
-            }
-            //Too soon
-            else if (delta < 10){
-                //Ignore the fucker
-            }
-            //Too soon
-            else{
-                client.say(channels[0], nick+" cannot mine yet. Try again in "+(minimumDelta-delta)+" seconds.");
-            }
+        	Pickaxe.getByUserId(user.id, function(pickaxe){
+
+	        	const delta = Math.floor(Date.now()/1000) - user.lastMining;
+	        	//Mining
+	            if (delta >= minimumDelta){
+	            	const rand = Math.random();
+	            	const gold = rand * (delta/86400);	//Max 1 per day
+	            	
+	            	User.addGold(nick, gold);
+	                client.say(channels[0], nick+" mined for "+(delta/60).toFixed(2)+" minute(s) at "+(rand*100).toFixed(2)+"% rate, earning "+gold+" gold !");
+
+	            	if (pickaxe){
+	            		let pickaxeRand = Math.random()*pickaxe.power;
+	            		let pickaxeGold = pickaxeRand * (delta/86400);
+	            		client.say(channels[0], "["+pickaxe.name+"] was used to dig, earning "+pickaxeGold+" more gold at "+(pickaxeRand*100).toFixed(2)+"% rate and "+pickaxe.power+" power")
+
+	            		//Pickaxe damage goes here
+	            	}
+	            }
+	            //Too soon
+	            else if (delta < 10){
+	                //Ignore the fucker
+	            }
+	            //Too soon
+	            else{
+	                client.say(channels[0], nick+" cannot mine yet. Try again in "+(minimumDelta-delta)+" seconds.");
+	            }
+            });
         }
     });
+}
+
+class Pickaxe{
+	static create(name, power, durability, userId){
+		db.serialize(function(){
+			Pickaxe.delete(userId);
+			db.run("INSERT INTO Pickaxe (name, power, durability, userId) VALUES ($name, $power, $durability, $userId)", {
+				$name: name,
+				$power: power,
+				$durability: durability,
+				$userId: userId
+			});
+		});
+	}
+
+	static getByUserId(userId, callback){
+		db.get("SELECT rowid AS id, name, power, durability FROM Pickaxe WHERE userId=?", userId, function(err, row) {
+            callback && callback(row);
+        });
+	}
+
+	static delete(userId){	//Does not actually delete, on purpose for later
+		db.run("UPDATE Pickaxe SET userId=0 WHERE userId=?", userId);
+	}
 }
 
 class User{
