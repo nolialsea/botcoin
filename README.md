@@ -14,7 +14,7 @@ You only need to register once, it connects you too
 ### connect LOGIN PASSWORD
 You will need to reconnect basically each time you quit the channel, but you stay connected even when you change your nick
 ### create pickaxe INVESTMENT NAME  
-INVESTMENT is the amount of gold you want to spend to forge this pickaxe  
+INVESTMENT is the amount of gold you want to spend to forge this pickaxe, it should be a positive floating number  
 The pickaxe power and durability will be random()*INVESTMENT  
 NAME can be 32 characters long and contain pretty much any character, even spaces  
 You can only have one pickaxe, and creating a new one delete the previous
