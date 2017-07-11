@@ -23,14 +23,16 @@ THE SOFTWARE.
 
 */
 
-let irc = require('irc');
-let fs = require('fs');
-let sqlite3 = require('sqlite3').verbose();
-let db = new sqlite3.Database('db.db');
-let sqlTimestamp = "strftime('%s','now')";
-let channels = ['#cbna'];
-let nickname = 'BotCoin';
-let shortnick = 'bc';
+const irc = require('irc'),
+	fs = require('fs'),
+	md5 = require('md5'),
+	sqlite3 = require('sqlite3'),
+	db = new sqlite3.Database('db.db'),
+	sqlTimestamp = "strftime('%s','now')",
+	channels = ['#nolichan'],
+	nickname = 'BotCoin',
+	shortnick = 'bc',
+	minimumDelta = 60	//Minimum time between minings in seconds
 
 //Database initialisation
 db.serialize(function() {
@@ -78,11 +80,13 @@ client.addListener('message#', function (nick, channel, message) {
 });
 
 client.addListener('pm', function (nick, message) {
-    console.log('[PRIVATE] => ' + nick + ' : ' + message);
-
+    //console.log('[PRIVATE] => ' + nick + ' : ' + message);
+    let res,
+    	regConnect = new RegExp("^connect ([^ ]*) ([^ ]*$)","i"),
+    	regRegister = new RegExp("^register ([^ ]*) ([^ ]*$)","i");
+    
     //Connection
-    let regConnect = new RegExp("^connect ([^ ]*) ([^ ]*)","i");
-    let res = message.match(regConnect);
+	res = message.match(regConnect);
     if (res){
         if (res.length === 3){
             User.connect(nick, res[1], res[2]);
@@ -92,7 +96,6 @@ client.addListener('pm', function (nick, message) {
     }
 
     //Registration
-    let regRegister = new RegExp("^register ([^ ]*) ([^ ]*)","i");
     res = message.match(regRegister);
     if (res){
         if (res.length === 3){
@@ -131,12 +134,12 @@ client.addListener('error', function(message) {
 });
 
 function help(){
-    client.say(channels[0], "Private commands :");
+    client.say(channels[0], "Private commands (use \"/msg BotCoin COMMAND\") :");
     client.say(channels[0], "    register LOGIN PASSWORD");
     client.say(channels[0], "    connect LOGIN PASSWORD");
     client.say(channels[0], "Channel commands :");
-    client.say(channels[0], "    bc help");
-    client.say(channels[0], "    bc mine");
+    client.say(channels[0], "    "+shortnick+" help");
+    client.say(channels[0], "    "+shortnick+" mine");
 }
 
 function mine(nick){
@@ -144,14 +147,21 @@ function mine(nick){
         if (user === undefined){
             client.say(nick, "You are not logged in");
         }else{
-            const gold = Math.random();
-            let delta = Math.floor(Date.now()/1000) - user.lastMining;
-
-            if (delta >= 60){
-                db.run("UPDATE User SET gold=gold+$gold, lastMining="+sqlTimestamp+" WHERE nick=$nick", {$gold: gold, $nick: nick});
-                client.say(channels[0], nick+" found "+gold.toFixed(3)+"g of gold ! Total gold for "+nick+" : "+(user.gold+gold).toFixed(3));
-            }else{
-                client.say(channels[0], nick+" tried to mine but is still too tired. You have to rest for at least one minute between minings.");
+        	const delta = Math.floor(Date.now()/1000) - user.lastMining;
+        	//Mining
+            if (delta >= minimumDelta){
+            	const rand = Math.random();
+            	const gold = rand * (delta/86400);	//Max 1 per day
+                User.addGold(nick, gold);
+                client.say(channels[0], nick+" found "+gold+"g of gold ("+(delta/60).toFixed(2)+" minute(s) at "+(rand*100).toFixed(2)+"% rate) ! Total gold for "+nick+" : "+(user.gold+gold));
+            }
+            //Too soon
+            else if (delta < 10){
+                //Ignore the fucker
+            }
+            //Too soon
+            else{
+                client.say(channels[0], nick+" cannot mine yet. Try again in "+(minimumDelta-delta)+" seconds.");
             }
         }
     });
@@ -159,6 +169,7 @@ function mine(nick){
 
 class User{
     static register(nick, login, password){
+    	password = md5(password);
         db.serialize(function() {
             //Check if user exists
             User.getByLogin(login, function(row){
@@ -180,6 +191,7 @@ class User{
     }
 
     static connect(nick, login, password){
+    	password = md5(password);
         db.serialize(function() {
             //Check if user exists
             User.getByLogin(login, function(row){
@@ -199,14 +211,12 @@ class User{
 
     static getByLogin(login, callback){
         db.get("SELECT rowid AS id, login, nick, gold, lastMining FROM User WHERE login=?", login, function(err, row) {
-            console.log(row);
             callback && callback(row);
         });
     }
 
     static getByNick(nick, callback){
         db.get("SELECT rowid AS id, login, nick, gold, lastMining FROM User WHERE nick=?", nick, function(err, row) {
-            console.log(row);
             callback && callback(row);
         });
     }
@@ -217,5 +227,9 @@ class User{
 
     static removeNick(nick){
         db.run("UPDATE User SET nick='none' WHERE nick=?", nick);
+    }
+
+    static addGold(nick, amount){
+    	db.run("UPDATE User SET gold=gold+$amount, lastMining="+sqlTimestamp+" WHERE nick=$nick", {$amount: amount, $nick: nick});
     }
 }

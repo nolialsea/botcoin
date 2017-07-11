@@ -20,6 +20,7 @@
   "homepage": "https://github.com/nolialsea/botcoin",
   "dependencies": {
     "sqlite3": "*",
-    "irc": "*"
+    "irc": "*",
+    "md5": "*"
   }
 }
