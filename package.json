@@ -1,0 +1,21 @@
+{
+  "name": "BotCoin",
+  "description": "",
+  "version": "1.0.0",
+  "description": "IRC bot to mine worthless virtual gold",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+  "type": "git",
+    "url": "https://github.com/nolialsea/botcoin.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nolialsea/botcoin/issues"
+  },
+  "homepage": "https://github.com/nolialsea/botcoin"
+}
