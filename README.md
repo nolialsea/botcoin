@@ -3,7 +3,6 @@ IRC bot that allows to mine worthless virtual gold, designed specifically for th
 
 The project is still WIP, you can submit ideas for new features here : https://github.com/nolialsea/botcoin/issues/1
 
-# Commands
 ## Channel comamnds
 ### bc mine
 Gives between 0 and 1 gold per day. The amount of gold is based on the amount of time you didn't mine, so it's useless to spam it.
