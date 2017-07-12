@@ -143,7 +143,7 @@ client.addListener('pm', function (nick, message) {
 		if (res.length === 3){
 			upgradePickaxe(nick, res[1]);
 		}else{
-			client.say(nick, "Error ! Use like this : \"upgrade pickaxe INVESTMENT NAME\"");
+			client.say(nick, "Error ! Use like this : \"upgrade pickaxe INVESTMENT\"");
 		}
 		return;
 	}
