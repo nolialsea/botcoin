@@ -29,21 +29,21 @@ const irc = require('irc'),
 	sqlite3 = require('sqlite3'),
 	db = new sqlite3.Database('db.db'),
 	sqlTimestamp = "strftime('%s','now')",
-	channels = ['#cbna'],
+	channels = ['#nolichan'],
 	nickname = 'BotCoin',
-	shortnick = 'bc',
+	shortnick = '.bc',
 	minimumDelta = 60	//Minimum time between minings in seconds
 
 //Database initialisation
 db.serialize(function() {
 	db.run("CREATE TABLE IF NOT EXISTS User (login TEXT, password TEXT, nick TEXT, gold REAL, lastMining INTEGER)");
-	db.run("CREATE TABLE IF NOT EXISTS Pickaxe (name TEXT, power REAL, durability REAL, userId INTEGER)");
+	db.run("CREATE TABLE IF NOT EXISTS Pickaxe (name TEXT, power REAL, durability REAL, upgrade INTEGER, userId INTEGER)");
 });
 
 let client = new irc.Client('irc.mibbit.net', nickname, {
+	port: 6667,
 	userName: 'NoliBot',
 	realName: 'The Real NoliBot',
-	port: 6667,
 	localAddress: null,
 	debug: false,
 	showErrors: true,
@@ -70,6 +70,7 @@ client.addListener('message#', function (nick, channel, message) {
 	let res,
 		regMine = new RegExp("^"+shortnick+" mine","i"),
 		regHelp = new RegExp("^"+shortnick+" help$","i");
+		regShowMoney = new RegExp("^"+shortnick+" show[ ]?money","i");
 
 	//Mining
 	res = message.match(regMine);
@@ -84,6 +85,13 @@ client.addListener('message#', function (nick, channel, message) {
 		help();
 		return;
 	}
+
+	//Show Money
+	res = message.match(regShowMoney);
+	if (res){
+		showMoney(nick);
+		return;
+	}
 });
 
 client.addListener('pm', function (nick, message) {
@@ -92,6 +100,7 @@ client.addListener('pm', function (nick, message) {
 		regConnect = new RegExp("^connect ([^ ]*) ([^ ]*$)","i"),
 		regRegister = new RegExp("^register ([^ ]*) ([^ ]*$)","i"),
 		regCreatePickaxe = new RegExp("^create pickaxe (([0-9]*[.])?[0-9]+) ([^]*)","i");
+		regUpgradePickaxe = new RegExp("^upgrade pickaxe (([0-9]*[.])?[0-9]+)","i");
 	
 	//Connection
 	res = message.match(regConnect);
@@ -123,6 +132,18 @@ client.addListener('pm', function (nick, message) {
 			createPickaxe(nick, res[1], res[3]);
 		}else{
 			client.say(nick, "Error ! Use like this : \"create pickaxe INVESTMENT NAME\"");
+		}
+		return;
+	}
+
+	//Upgrade pickaxe
+	res = message.match(regUpgradePickaxe);
+	if (res){
+		console.log(res);
+		if (res.length === 3){
+			upgradePickaxe(nick, res[1]);
+		}else{
+			client.say(nick, "Error ! Use like this : \"upgrade pickaxe INVESTMENT NAME\"");
 		}
 		return;
 	}
@@ -160,16 +181,27 @@ function createPickaxe(nick, investment, name){
 		if (user !== undefined){
 			if (user.gold >= investment){
 				User.addGold(nick, -investment);
-				const power = Math.random()*investment;
+				const randPower = Math.random();
+				const power = randPower*investment;
 				const durability = Math.random()*investment;
 				Pickaxe.create(name, power, durability, user.id);
-				client.say(nick, "You created ["+name+"] ! Power : "+power+" | durability : "+durability+"");
+				client.say(nick, "You created ["+name+"] ! Power : "+power+" ("+(randPower*100).toString()+"% of your investment) | durability : "+durability+"");
 			}else{
 				client.say(nick, "You don't have enough gold");
 			}
 		}
 	});
 }
+
+function showMoney(nick){
+	User.getByNick(nick, function(user){
+		if (user === undefined){
+			client.say(channels[0], "You must be connected to show your money");
+		}else{
+			client.say(channels[0], nick+" have "+user.gold+" gold");
+		}
+	});
+};
 
 function help(){
 	client.say(channels[0], "Private commands (use \"/msg BotCoin COMMAND\") :");
@@ -179,6 +211,30 @@ function help(){
 	client.say(channels[0], "Channel commands :");
 	client.say(channels[0], "	 "+shortnick+" help");
 	client.say(channels[0], "	 "+shortnick+" mine");
+	client.say(channels[0], "	 "+shortnick+" show money");
+}
+
+function upgradePickaxe(nick, investment){
+	User.getByNick(nick, function(user){
+		if (user === undefined){
+			client.say(nick, "You are not logged in");
+		}else{
+			Pickaxe.getByUserId(user.id, function(pickaxe){
+				if (!pickaxe){
+					client.say(nick, "You don't have any pickaxe to upgrade")
+				}else{
+					if (user.gold < investment){
+						client.say(nick, "You don't have enough money")
+					}else{
+						const rand = Math.random();
+						Pickaxe.upgrade(user.id, investment*rand);
+						client.say(nick, "Your pickaxe have been upgraded !");
+						client.say(nick, " It gained "+(investment*rand)+" power ("+(rand*100).toFixed(2)+"% of your investment). It now have a total power of "+(pickaxe.power+investment*rand));
+					}
+				}
+			});
+		}
+	});
 }
 
 function mine(nick){
@@ -198,8 +254,8 @@ function mine(nick){
 					client.say(channels[0], nick+" mined for "+(delta/60).toFixed(2)+" minute(s) at "+(rand*100).toFixed(2)+"% rate, earning "+gold+" gold !");
 
 					if (pickaxe){
-						let pickaxeRand = Math.random()*pickaxe.power;
-						let pickaxeGold = pickaxeRand * (delta/86400);
+						let pickaxeRand = Math.random();
+						let pickaxeGold = pickaxeRand * pickaxe.power * (delta/86400);
 						client.say(channels[0], "["+pickaxe.name+"] was used to dig, earning "+pickaxeGold+" more gold at "+(pickaxeRand*100).toFixed(2)+"% rate and "+pickaxe.power+" power")
 						
 						User.addGold(nick, pickaxeGold);
@@ -223,7 +279,7 @@ class Pickaxe{
 	static create(name, power, durability, userId){
 		db.serialize(function(){
 			Pickaxe.delete(userId);
-			db.run("INSERT INTO Pickaxe (name, power, durability, userId) VALUES ($name, $power, $durability, $userId)", {
+			db.run("INSERT INTO Pickaxe (name, power, durability, upgrade, userId) VALUES ($name, $power, $durability, 0, $userId)", {
 				$name: name,
 				$power: power,
 				$durability: durability,
@@ -233,13 +289,17 @@ class Pickaxe{
 	}
 
 	static getByUserId(userId, callback){
-		db.get("SELECT rowid AS id, name, power, durability FROM Pickaxe WHERE userId=?", userId, function(err, row) {
+		db.get("SELECT rowid AS id, name, power, durability, upgrade FROM Pickaxe WHERE userId=?", userId, function(err, row) {
 			callback && callback(row);
 		});
 	}
 
 	static delete(userId){	//Does not actually delete, on purpose for later
 		db.run("UPDATE Pickaxe SET userId=0 WHERE userId=?", userId);
+	}
+
+	static upgrade(userId, amount){
+		db.run("UPDATE Pickaxe SET power=power+$amount, upgrade=upgrade+1 WHERE userId=$userId", {$userId: userId, $amount: amount});
 	}
 }
 
