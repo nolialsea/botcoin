@@ -44,7 +44,7 @@ So due to randomness, a pickaxe have a small chance to actually mine less gold t
 - Mining subtracts `random()*delta` to the durability, where delta represent the number of days since last mining as a floating point (so you can lose between zero and one durability point per day, depending on how lucky you are)
 - Mining gives `random()*power*delta` more gold (it adds to the normal "punch mining")
 
-#### Short version : Investing 1 gold will create a pickaxe that mines 0 to 4 gold per day, for 0 to 2 days (VERY ROUGHTLY).
+#### Short version : Investing 1 gold will create a pickaxe that mines 0 to 4 gold per day, for 0 to ??? days (VERY ROUGHTLY).
 
 ### Pickaxes creation
 Command : `create pickaxe INVESTMENT NAME`
