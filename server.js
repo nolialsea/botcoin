@@ -109,29 +109,40 @@ let command = {
 						if (delta >= cfg.minimumDelta || true){	//Mininum mining delta disabled for now
 							const rand = Math.random();
 							const gold = rand * (delta/86400);	//Max 1 per day
+
+							let pickaxeRand;
+							let pickaxeGold;
+							let damageRand;
+							let damage;
 							
 							User.addGold(nick, gold);
 							User.updateLastMining(nick);
 							client.say(nick, "You mined for "+(delta/60).toFixed(2)+" minute(s) at "+(rand*100).toFixed(2)+"% rate, earning "+gold.toFixed(8)+" gold !");
 
+							// Pickaxe
 							if (pickaxe){
-								let pickaxeRand = Math.random();
-								let pickaxeGold = pickaxeRand * pickaxe.power * (delta/86400);
-								let damageRand = Math.random();
-								let damage = damageRand * (delta/86400);
+								pickaxeRand = Math.random();
+								pickaxeGold = pickaxeRand * (delta/86400) * pickaxe.power;
+								damageRand = Math.random();
+								damage = damageRand * (delta/86400);
 
 								Pickaxe.damage(user.id, damage);
-								client.say(nick, "Your pickaxe lost "+damage.toFixed(8)+" durability at "+(damageRand*100).toFixed(2)+"% damage rate. Durability left : "+((pickaxe.durability-damage)/pickaxe.maxDurability*100).toFixed(2)+"%"+
-									", maximum "+((pickaxe.durability-damage)*24*60).toFixed(2)+" minute(s) of mining remaining");
+								
+								// Destroyed pickaxe
 								if (pickaxe.durability-damage <= 0){
 									Pickaxe.delete(user.id);
 									client.say(nick, "Your pickaxe broke before you finished and gold has been lost ! Be more careful next time");
-								}else{
+								}
+								//Pickaxe mining
+								else{
 									User.addGold(nick, pickaxeGold);
 									Pickaxe.addToTotalGoldMined(user.id, pickaxeGold);
 									client.say(nick, "["+pickaxe.name+"] was used to dig, earning "+pickaxeGold.toFixed(8)+" more gold at "+(pickaxeRand*100).toFixed(2)+"% rate and "+pickaxe.power.toFixed(8)+" power")
+									client.say(nick, "Your pickaxe lost "+damage.toFixed(8)+" durability at "+(damageRand*100).toFixed(2)+"% damage rate. Durability left : "+((pickaxe.durability-damage)/pickaxe.maxDurability*100).toFixed(2)+"%"+
+									", "+((pickaxe.durability-damage)*24*60).toFixed(2)+" minute(s) of mining remaining (minimum)");
 								}
 							}
+							client.say(nick, "You now have "+(user.gold+gold+(pickaxe?pickaxe.durability-damage>0?pickaxeGold:0:0)).toFixed(8)+" gold (+"+(gold+(!pickaxe?0:pickaxe.durability-damage<=0?0:pickaxeGold)).toFixed(8)+")");
 						}
 						//Too soon
 						else{
@@ -164,7 +175,7 @@ let command = {
 								const randDurability = Math.random();
 								const durability = randDurability*investment;
 								Pickaxe.create(user.id, name, power, durability, investment);
-								client.say(nick, "You created ["+name+"] ! Power : "+power.toFixed(8)+" ("+(randPower*100*2).toFixed(2)+"% of your investment) | Max durability : "+durability.toFixed(8)+" ("+(randDurability*100*2).toFixed(2)+"% of your investment)");
+								client.say(nick, "You created ["+name+"] ! Power : "+power.toFixed(8)+" ("+(randPower*100*4).toFixed(2)+"% of your investment) | Max durability : "+durability.toFixed(8)+" ("+(randDurability*100).toFixed(2)+"% of your investment)");
 							}else{
 								client.say(nick, "You don't have enough gold");
 							}
@@ -207,7 +218,7 @@ let command = {
 										const randDurability = Math.random();
 										const durability = randDurability*investment;
 										Pickaxe.upgrade(user.id, power, durability, investment);
-										client.say(nick, "You upgraded ["+pickaxe.name+"] ! Power : "+(pickaxe.power+power).toFixed(8)+" (+"+power.toFixed(8)+", or "+(randPower*100*2).toFixed(2)+"% of your investment) | Max durability : "+(pickaxe.maxDurability+durability).toFixed(8)+" ("+(randDurability*100*2).toFixed(2)+"% of your investment)");
+										client.say(nick, "You upgrade ["+pickaxe.name+"] ! New power : "+(pickaxe.power+power).toFixed(8)+" (+"+power.toFixed(8)+", or "+(randPower*100*4).toFixed(2)+"% of your investment) | New max durability : "+(pickaxe.maxDurability+durability).toFixed(8)+" (+"+(randDurability*100).toFixed(2)+"% of your investment)");
 									}else{
 										client.say(nick, "You don't have enough gold");
 									}
@@ -310,12 +321,11 @@ let command = {
 						if (!pickaxe){
 							client.say(nick, "You don't have a pickaxe");
 						}else{
-							client.say(nick, "["+pickaxe.name+"]");
-							client.say(nick, "Power: "+pickaxe.power.toFixed(8));
-							client.say(nick, "Durability: "+pickaxe.durability.toFixed(8)+"/"+pickaxe.maxDurability.toFixed(8)+" ("+(pickaxe.durability/pickaxe.maxDurability*100).toFixed(2)+
+							client.say(nick, "["+pickaxe.name+"]\tPower: "+pickaxe.power.toFixed(8)+
+								"\tDurability: "+pickaxe.durability.toFixed(8)+"/"+pickaxe.maxDurability.toFixed(8)+
+								" ("+(pickaxe.durability/pickaxe.maxDurability*100).toFixed(2)+
 								"%, maximum "+(pickaxe.durability*24*60).toFixed(2)+" minute(s) of mining remaining)");
-							client.say(nick, "Upgrades: "+pickaxe.upgrade);
-							client.say(nick, "Repairs: "+pickaxe.repair);
+							client.say(nick, "Upgrades: "+pickaxe.upgrade+"\tRepairs: "+pickaxe.repair);
 							client.say(nick, "Total gold mined: "+pickaxe.totalGoldMined.toFixed(8));
 							client.say(nick, "Total investment: "+pickaxe.totalInvestment.toFixed(8));
 						}
@@ -356,7 +366,7 @@ let command = {
 }
 
 client.addListener('pm', function (nick, message) {
-	console.log("Message from "+nick+" : "+message.match(/^[^ ]*/i)[0]+"...");
+	console.log("Message from "+nick+" : "+message.match(/^[^ ]*/i)[0]+"...");	//Log only the first word, mostly for privacy reasons
 	for (var key in command) {
 	    command[key](nick, message);
 	}
@@ -365,7 +375,7 @@ client.addListener('pm', function (nick, message) {
 client.addListener('join', function (channel, nick, message) {
 	console.log(nick + ' joined');
 	if (nick === cfg.nickname){
-		client.say(cfg.channels[0], "Type \"/msg "+cfg.nickname+" help\" to know more about me.");
+		//client.say(cfg.channels[0], "Type \"/msg "+cfg.nickname+" help\" to know more about me.");
 	}
 });
 
