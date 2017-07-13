@@ -24,7 +24,6 @@ THE SOFTWARE.
 */
 
 const irc = require('irc'),
-	fs = require('fs'),
 	md5 = require('md5'),
 	sqlite3 = require('sqlite3'),
 	db = new sqlite3.Database('db.db'),
@@ -37,7 +36,7 @@ const irc = require('irc'),
 //Database initialisation
 db.serialize(function() {
 	db.run("CREATE TABLE IF NOT EXISTS User (login TEXT, password TEXT, nick TEXT, gold REAL, lastMining INTEGER)");
-	db.run("CREATE TABLE IF NOT EXISTS Pickaxe (name TEXT, power REAL, durability REAL, upgrade INTEGER, userId INTEGER)");
+	db.run("CREATE TABLE IF NOT EXISTS Pickaxe (name TEXT, power REAL, maxDurability REAL, durability REAL, upgrade INTEGER, repair INTEGER, userId INTEGER)");
 });
 
 let client = new irc.Client('irc.mibbit.net', nickname, {
@@ -182,10 +181,11 @@ function createPickaxe(nick, investment, name){
 			if (user.gold >= investment){
 				User.addGold(nick, -investment);
 				const randPower = Math.random();
-				const power = randPower*investment;
-				const durability = Math.random()*investment;
+				const power = randPower*investment*4;
+				const randDurability = Math.random()
+				const durability = randDurability*investment;
 				Pickaxe.create(name, power, durability, user.id);
-				client.say(nick, "You created ["+name+"] ! Power : "+power+" ("+(randPower*100).toString()+"% of your investment) | durability : "+durability+"");
+				client.say(nick, "You created ["+name+"] ! Power : "+power+" ("+(randPower*100*2).toString()+"% of your investment) | Max durability : "+durability+" ("+(randDurability*100*2).toString()+"% of your investment)");
 			}else{
 				client.say(nick, "You don't have enough gold");
 			}
@@ -226,10 +226,12 @@ function upgradePickaxe(nick, investment){
 					if (user.gold < investment){
 						client.say(nick, "You don't have enough money")
 					}else{
-						const rand = Math.random();
-						Pickaxe.upgrade(user.id, investment*rand);
-						client.say(nick, "Your pickaxe have been upgraded !");
-						client.say(nick, " It gained "+(investment*rand)+" power ("+(rand*100).toFixed(2)+"% of your investment). It now have a total power of "+(pickaxe.power+investment*rand));
+						const randPower = Math.random();
+						const power = randPower*investment*4;
+						const randDurability = Math.random()
+						const durability = randDurability*investment;
+						Pickaxe.upgrade(name, power, durability, user.id);
+						client.say(nick, "You upgraded ["+name+"] ! Power : "+pickaxe.power+power+" (+"+(randPower*100*2).toString()+"% of your investment) | Max durability : "+pickaxe.maxDurability+durability+" (+"+(randDurability*100*2).toString()+"% of your investment)");
 					}
 				}
 			});
@@ -279,7 +281,7 @@ class Pickaxe{
 	static create(name, power, durability, userId){
 		db.serialize(function(){
 			Pickaxe.delete(userId);
-			db.run("INSERT INTO Pickaxe (name, power, durability, upgrade, userId) VALUES ($name, $power, $durability, 0, $userId)", {
+			db.run("INSERT INTO Pickaxe (name, power, maxDurability, durability, upgrade, repair, userId) VALUES ($name, $power, $durability, $durability, 0, 0, $userId)", {
 				$name: name,
 				$power: power,
 				$durability: durability,
@@ -298,8 +300,16 @@ class Pickaxe{
 		db.run("UPDATE Pickaxe SET userId=0 WHERE userId=?", userId);
 	}
 
-	static upgrade(userId, amount){
-		db.run("UPDATE Pickaxe SET power=power+$amount, upgrade=upgrade+1 WHERE userId=$userId", {$userId: userId, $amount: amount});
+	static damage(userId, damage){
+		db.run("UPDATE Pickaxe SET durability=durability-$damage WHERE userId=$userId", {$userId: userId, $damage: damage});
+	}
+
+	static upgrade(userId, power, durability){
+		db.run("UPDATE Pickaxe SET power=power+$power, maxDurability=maxDurability+$durability, upgrade=upgrade+1 WHERE userId=$userId", {$userId: userId, $power: power, $durability: durability});
+	}
+
+	static repair(userId, amount){
+		db.run("UPDATE Pickaxe SET durability=min(durability+$durability, maxDurability), repair=repair+1 WHERE userId=$userId", {$userId: userId, $durability: amount});
 	}
 }
 
