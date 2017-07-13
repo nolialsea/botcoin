@@ -342,6 +342,16 @@ let command = {
 			return true; //Return true if command is found
 		}
 		return false;	//Return false if command is not found
+	},
+	//Show help
+	showHelp: function(nick, msg){
+		let reg = new RegExp("^(show )?help","i")
+		let res = msg.match(reg);
+		if (res){
+			client.say(nick, "https://github.com/nolialsea/botcoin/issues/1");
+			return true; //Return true if command is found
+		}
+		return false;	//Return false if command is not found
 	}
 }
 
