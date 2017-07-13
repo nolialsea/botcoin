@@ -88,16 +88,8 @@ Up to debate.
 Gamble your money and lose it like real men.
 We can imagine many mini games for that, it's still largely up to debate.
 
-### Mining zones ?
-Mine the channel or BotCoin himself and get different outcomes
-Mining the channel gives currencies (gold for now but it's not definitive)
-Maybe mining BotCoin could just have a very small chance of looting... Something. Other than the actual currency preferably. Still to define
-
 ## Potential features
 At first the bot was going to only be a fun currency mining tool without much usefulness for a very small IRC community, but why not as well make it a whole IRC game.
-
-### RPG features
-Craft weapons and equipments, fight, gain XP
 
 ### World map
 Explore, travel, find dungeons, slay dragons, fuck princesses.
@@ -111,7 +103,7 @@ I don't like this idea so much, since this project is an IRC bot...
 But just a general overview of what happens would be cool to have, especially if there is a map
 
 ### Slaves
-They mine automatically for you !
-Maybe you can craft them a pickaxe and equipments too ?
+They mine or repair you pickaxe automatically for you !
+Maybe you can craft them a pickaxe too ?
 Send them to missions ?
 They will most probably die anyway.
