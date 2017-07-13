@@ -40,7 +40,7 @@ I try to keep the maths of how much gold a pickaxe can mine (before repairs and 
 So due to randomness, a pickaxe have a small chance to actually mine less gold than how much you invested on it
 - Creating a pickaxe gives it `random()*investment*4` power and `random()*investment` max durability, so an investment of 1 gold will create a pickaxe that lives in average for one day and will mine in average 2 gold (can greatly vary)
 - Upgrading a pickaxe adds `random()*investment*4` to its power and `random()*investment` to max durability, but does not repair it
-- Repairing a pickaxe restores `random()*investment` durability points, limited by the max durability (so you will have to pay roughly 1 gold each day to keep it `NOT DESTROYED`, and it can be much less or much more depending on how lucky you are)
+- Repairing a pickaxe restores `random()*investment*2` durability points, limited by the max durability (so you will have to pay maximum 1 gold each day to keep it `NOT DESTROYED`, and it can be much less depending on how lucky you are)
 - Mining subtracts `random()*delta` to the durability, where delta represent the number of days since last mining as a floating point (so you can lose between zero and one durability point per day, depending on how lucky you are)
 - Mining gives `random()*power*delta` more gold (it adds to the normal "punch mining")
 
@@ -62,7 +62,7 @@ Pickaxes keep track of how many upgrades they have... I may or may not use it la
 
 ### Pickaxe repair
 Command : `repair pickaxe INVESTMENT`
-Repairing a pickaxe adds `random()*INVESTMENT` to its durability, but is limited by the max durability of the pickaxe. Excess investment is **LOST**
+Repairing a pickaxe adds `random()*INVESTMENT*2` to its durability, but is limited by the max durability of the pickaxe. Excess investment is **LOST**
 `INVESTMENT` should be a positive floating number, so `0.42`, `42` and `.42` have a correct format
 
 ### Show gold
