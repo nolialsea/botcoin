@@ -3,18 +3,115 @@ IRC bot that allows to mine worthless virtual gold, designed specifically for th
 
 The project is still WIP, you can submit ideas for new features here : https://github.com/nolialsea/botcoin/issues/1
 
-## Channel comamnds
-### bc mine
-Gives between 0 and 1 gold per day (without pickaxe). The amount of gold is based on the amount of time since you last mined, so it's useless to spam it.
-### bc help
-Shows the commands
-## Private commands (/msg BotCoin COMMAND)
-### register LOGIN PASSWORD
-You only need to register once, it connects you too
-### connect LOGIN PASSWORD
-You will need to reconnect basically each time you quit the channel, but you stay connected even when you change your nick
-### create pickaxe INVESTMENT NAME  
-INVESTMENT is the amount of gold you want to spend to forge this pickaxe, it should be a positive floating number  
-The pickaxe power and durability will be random()*INVESTMENT  
-NAME can be 32 characters long and contain pretty much any character, even spaces  
-You can only have one pickaxe, and creating a new one delete the previous
+## Current features
+### Commands are all PMs now !
+There will be some channel commands to trade, show how much gold you have, show your pickaxe, etc, but frequent commands will be PM only.
+This is to avoid unnecessary spamming on the main channel, and give it a more "gaming" feeling.
+I plan to use the channel only for events announcement, pvp and pve, but not "solo" commands or notifications. 
+
+### Show help
+Command : `help` or `show help`
+Send you the link to this page. Deal with it
+
+### Register
+Command : `register LOGIN PASSWORD`
+Register a new account and connect to it automatically. You should only do it once.  
+The password is badly encrypted in md5, not even salted, so don't use your usual passwords.
+
+### Connect
+Command : `connect LOGIN PASSWORD`
+Connect to an existing account.
+You will need to reconnect basically after each time you quit the channel
+You keep the connection even when you change your nick
+
+### Mine
+Command : `mine`
+Mine `random()*delta` gold, where delta is the number of days since the last mining (or registration) as a floating point.
+Basically, you will earn between 0 and 1 gold per day with your bare hands (pickaxes allows to mine more)
+Using this command only computes the gold you earned since the last mining, it "updates" your wallet if you prefer, but does not allow to earn more so spamming it is useless.
+Mining damages your pickaxe if you have one. If the pickaxe break during the mining, the gold that should have been mined by the pickaxe is lost.
+
+### Pickaxes
+You can use your currencies to craft, upgrade, or repair pickaxes.
+Mining damages the equipped pickaxe.
+A pickaxe that is completely broken is **DESTROYED**, but you can repair damaged ones.
+You can invest gold to upgrade them, the quality of the upgrade is based on the amount of gold invested, same for pickaxe creation.
+I try to keep the maths of how much gold a pickaxe can mine (before repairs and upgrades) in its lifetime to roughtly double its investment, but can actually be between x0 and x4.
+So due to randomness, a pickaxe have a small chance to actually mine less gold than how much you invested on it
+- Creating a pickaxe gives it `random()*investment*4` power and `random()*investment` max durability, so an investment of 1 gold will create a pickaxe that lives in average for one day and will mine in average 2 gold (can greatly vary)
+- Upgrading a pickaxe adds `random()*investment*4` to its power and `random()*investment` to max durability, but does not repair it
+- Repairing a pickaxe restores `random()*investment` durability points, limited by the max durability (so you will have to pay roughtly 1 gold each day to keep it `NOT DESTROYED`, and it can be much less or much more depending on how lucky you are)
+- Mining subtracts `random()*delta` to the durability, where delta represent the number of days since last mining as a floating point (so you can lose between zero and one durability point per day, depending on how lucky you are)
+- Mining gives `random()*power*delta` more gold (it adds to the normal "punch mining")
+
+#### Short version : Investing 1 gold will create a pickaxe that mines 0 to 4 gold per day, for 0 to 2 days (VERY ROUGHTLY).
+
+### Pickaxes creation
+Command : `create pickaxe INVESTMENT NAME`
+Creating a pickaxe gives it `random()*INVESTMENT*4` power and `random()*INVESTMENT` max durability, so an investment of 1 gold will create a pickaxe that lives in average for one day and will mine in average 2 gold
+`INVESTMENT` is the amount of gold you want to spend to forge this pickaxe, it should be a positive floating number
+`INVESTMENT` should be a positive floating number, so `0.42`, `42` and `.42` have a correct format
+NAME can be 32 characters long and contain pretty much any character, even spaces
+You can only have one pickaxe, and creating a new one will **DELETE** the previous
+
+### Pickaxe upgrade
+Command : `upgrade pickaxe INVESTMENT`
+Upgrading a pickaxe adds `random()*INVESTMENT*4` to its power and `random()*INVESTMENT` to max durability, but does not repair it
+`INVESTMENT` should be a positive floating number, so `0.42`, `42` and `.42` have a correct format
+Pickaxes keep track of how many upgrades they have... I may or may not use it later
+
+### Pickaxe repair
+Command : `repair pickaxe INVESTMENT`
+Repairing a pickaxe adds `random()*INVESTMENT` to its durability, but is limited by the max durability of the pickaxe. Excess investment is **LOST**
+`INVESTMENT` should be a positive floating number, so `0.42`, `42` and `.42` have a correct format
+
+### Show gold
+Command : `show gold` or `gold`
+Simply shows you how much gold you have.
+
+### Show pickaxe
+Command : `show pickaxe` or `pickaxe`
+Shows detailed description of your equiped pickaxe
+
+### Show delta
+Command : `show delta` or `delta`
+Shows the time since that last mining. Use this to be sure you won't break your pickaxe
+
+## Planned features
+
+### Trading
+Be able to give and receive money from others.
+Sell/buy pickaxes ?
+Up to debate.
+
+### Gambling
+Gamble your money and lose it like real men.
+We can imagine many mini games for that, it's still largely up to debate.
+
+### Mining zones ?
+Mine the channel or BotCoin himself and get different outcomes
+Mining the channel gives currencies (gold for now but it's not definitive)
+Maybe mining BotCoin could just have a very small chance of looting... Something. Other than the actual currency preferably. Still to define
+
+## Potential features
+At first the bot was going to only be a fun currency mining tool without much usefulness for a very small IRC community, but why not as well make it a whole IRC game.
+
+### RPG features
+Craft weapons and equipments, fight, gain XP
+
+### World map
+Explore, travel, find dungeons, slay dragons, fuck princesses.
+
+### PvP/PvE events
+Zombies attack, general melee, arena, duels, you can go wild on this one
+
+### Web interface
+Access and manage your account from the web
+I don't like this idea so much, since this project is an IRC bot...
+But just a general overview of what happens would be cool to have, especially if there is a map
+
+### Slaves
+They mine automatically for you !
+Maybe you can craft them a pickaxe and equipments too ?
+Send them to missions ?
+They will most probably die anyway.
