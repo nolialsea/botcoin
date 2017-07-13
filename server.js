@@ -139,7 +139,7 @@ let command = {
 									Pickaxe.addToTotalGoldMined(user.id, pickaxeGold);
 									client.say(nick, "["+pickaxe.name+"] was used to dig, earning "+pickaxeGold.toFixed(8)+" more gold at "+(pickaxeRand*100).toFixed(2)+"% rate and "+pickaxe.power.toFixed(8)+" power")
 									client.say(nick, "Your pickaxe lost "+damage.toFixed(8)+" durability at "+(damageRand*100).toFixed(2)+"% damage rate. Durability left : "+((pickaxe.durability-damage)/pickaxe.maxDurability*100).toFixed(2)+"%"+
-									", "+((pickaxe.durability-damage)*24*60).toFixed(2)+" minute(s) of mining remaining (minimum)");
+									", "+((pickaxe.durability-damage)*24*60).toFixed(2)+" minute(s) of mining remaining minimum");
 								}
 							}
 							client.say(nick, "You now have "+(user.gold+gold+(pickaxe?pickaxe.durability-damage>0?pickaxeGold:0:0)).toFixed(8)+" gold (+"+(gold+(!pickaxe?0:pickaxe.durability-damage<=0?0:pickaxeGold)).toFixed(8)+")");
@@ -218,7 +218,12 @@ let command = {
 										const randDurability = Math.random();
 										const durability = randDurability*investment;
 										Pickaxe.upgrade(user.id, power, durability, investment);
-										client.say(nick, "You upgrade ["+pickaxe.name+"] ! New power : "+(pickaxe.power+power).toFixed(8)+" (+"+power.toFixed(8)+", or "+(randPower*100*4).toFixed(2)+"% of your investment) | New max durability : "+(pickaxe.maxDurability+durability).toFixed(8)+" (+"+(randDurability*100).toFixed(2)+"% of your investment)");
+										client.say(nick, 
+											"You upgrade ["+pickaxe.name+"] ! New power : "+(pickaxe.power+power).toFixed(8)+
+											" (+"+power.toFixed(8)+", or "+(randPower*100*4).toFixed(2)+
+											"% of your investment) | New max durability : "+(pickaxe.maxDurability+durability).toFixed(8)+
+											" (+"+(randDurability*100).toFixed(2)+"% of your investment), minimum "+(pickaxe.durability*24*60).toFixed(2)+" minute(s) of mining remaining)"
+										);
 									}else{
 										client.say(nick, "You don't have enough gold");
 									}
@@ -266,7 +271,7 @@ let command = {
 										client.say(nick, "You repaired ["+pickaxe.name+"] ! Durability : "+
 											Math.min(pickaxe.durability+durability, pickaxe.maxDurability).toFixed(8)+"/"+pickaxe.maxDurability.toFixed(8)+
 											" ("+(Math.min(pickaxe.durability+durability, pickaxe.maxDurability)/pickaxe.maxDurability*100).toFixed(2)+"%, +"+
-											(randDurability*100).toFixed(2)+"% of your investment)");
+											(randDurability*100).toFixed(2)+"% of your investment), "+((pickaxe.durability+durability)*24*60).toFixed(2)+" minute(s) of mining remaining minimum)");
 									}else{
 										client.say(nick, "You don't have enough gold");
 									}
@@ -324,7 +329,7 @@ let command = {
 							client.say(nick, "["+pickaxe.name+"]\tPower: "+pickaxe.power.toFixed(8)+
 								"\tDurability: "+pickaxe.durability.toFixed(8)+"/"+pickaxe.maxDurability.toFixed(8)+
 								" ("+(pickaxe.durability/pickaxe.maxDurability*100).toFixed(2)+
-								"%, maximum "+(pickaxe.durability*24*60).toFixed(2)+" minute(s) of mining remaining)");
+								"%, "+(pickaxe.durability*24*60).toFixed(2)+" minute(s) of mining remaining minimum)");
 							client.say(nick, "Upgrades: "+pickaxe.upgrade+"\tRepairs: "+pickaxe.repair);
 							client.say(nick, "Total gold mined: "+pickaxe.totalGoldMined.toFixed(8));
 							client.say(nick, "Total investment: "+pickaxe.totalInvestment.toFixed(8));
