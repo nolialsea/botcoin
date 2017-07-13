@@ -121,6 +121,8 @@ let command = {
 								let damage = damageRand * (delta/86400);
 
 								Pickaxe.damage(user.id, damage);
+								client.say(nick, "Your pickaxe lost "+damage+" durability at "+(damageRand*100).toFixed(2)+"% damage rate. Durability left : "+((pickaxe.durability-damage)/pickaxe.maxDurability*100).toFixed(2)+"%"+
+									", maximum "+((pickaxe.durability-damage)*24*60).toFixed(2)+" minute(s) of mining remaining");
 								if (pickaxe.durability-damage <= 0){
 									Pickaxe.delete(user.id);
 									client.say(nick, "Your pickaxe broke before you finished and gold has been lost ! Be more careful next time");
@@ -128,7 +130,6 @@ let command = {
 									User.addGold(nick, pickaxeGold);
 									Pickaxe.addToTotalGoldMined(user.id, pickaxeGold);
 									client.say(nick, "["+pickaxe.name+"] was used to dig, earning "+pickaxeGold+" more gold at "+(pickaxeRand*100).toFixed(2)+"% rate and "+pickaxe.power+" power")
-									client.say(nick, "Your pickaxe lose "+damage+" durability. Durability left : "+(pickaxe.durability-damage)+"/"+pickaxe.maxDurability+" ("+((pickaxe.durability-damage)/pickaxe.maxDurability*100).toFixed(2)+"%)");
 								}
 							}
 						}
@@ -241,16 +242,16 @@ let command = {
 			res = msg.match(reg);
 			if (res){
 				if (res.length === 3){
+					let investment = res[1];
 					User.getByNick(nick, function(user){
 						if (user !== undefined){
 							Pickaxe.getByUserId(user.id, function(pickaxe){
 								if (pickaxe){
-									let investment = res[1];
 									if (user.gold >= investment){
 										User.addGold(nick, -investment);
 										const randDurability = Math.random();
 										const durability = randDurability*investment;
-										Pickaxe.repair(user.id, power, durability, investment);
+										Pickaxe.repair(user.id, durability, investment);
 										client.say(nick, "You repaired ["+pickaxe.name+"] ! Durability : "+
 											Math.min(pickaxe.durability+durability, pickaxe.maxDurability)+"/"+pickaxe.maxDurability+
 											" ("+(Math.min(pickaxe.durability+durability, pickaxe.maxDurability)/pickaxe.maxDurability*100).toFixed(2)+"%, +"+
@@ -282,7 +283,7 @@ let command = {
 	},
 	//Display gold
 	showGold: function(nick, msg){
-		let reg = new RegExp("^show gold","i")
+		let reg = new RegExp("^(show )?gold","i")
 		let res = msg.match(reg);
 		if (res){
 			User.getByNick(nick, function(user){
@@ -298,7 +299,7 @@ let command = {
 	},
 	//Show pickaxe
 	showPickaxe: function(nick, msg){
-		let reg = new RegExp("^show pickaxe","i")
+		let reg = new RegExp("^(show )?pickaxe","i")
 		let res = msg.match(reg);
 		if (res){
 			User.getByNick(nick, function(user){
@@ -311,13 +312,31 @@ let command = {
 						}else{
 							client.say(nick, "["+pickaxe.name+"]");
 							client.say(nick, "Power: "+pickaxe.power);
-							client.say(nick, "Durability: "+pickaxe.durability+"/"+pickaxe.maxDurability+" ("+(pickaxe.durability/pickaxe.maxDurability*100).toFixed(2)+"%)");
+							client.say(nick, "Durability: "+pickaxe.durability+"/"+pickaxe.maxDurability+" ("+(pickaxe.durability/pickaxe.maxDurability*100).toFixed(2)+
+								"%, maximum "+(pickaxe.durability*24*60).toFixed(2)+" minute(s) of mining remaining)");
 							client.say(nick, "Upgrades: "+pickaxe.upgrade);
 							client.say(nick, "Repairs: "+pickaxe.repair);
 							client.say(nick, "Total gold mined: "+pickaxe.totalGoldMined);
 							client.say(nick, "Total investment: "+pickaxe.totalInvestment);
 						}
 					});
+				}
+			});
+			return true; //Return true if command is found
+		}
+		return false;	//Return false if command is not found
+	},
+	//Show delta
+	showDelta: function(nick, msg){
+		let reg = new RegExp("^(show )?delta","i")
+		let res = msg.match(reg);
+		if (res){
+			User.getByNick(nick, function(user){
+				if (!user){
+					client.say(nick, "You are not connected");
+				}else{
+					const delta = Math.floor(Date.now()/1000) - user.lastMining;
+					client.say(nick, "Last mining was "+delta+" seconds ago");
 				}
 			});
 			return true; //Return true if command is found
