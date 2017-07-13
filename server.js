@@ -260,13 +260,13 @@ let command = {
 								if (pickaxe){
 									if (user.gold >= investment){
 										User.addGold(nick, -investment);
-										const randDurability = Math.random();
+										const randDurability = Math.random()*2;
 										const durability = randDurability*investment;
 										Pickaxe.repair(user.id, durability, investment);
 										client.say(nick, "You repaired ["+pickaxe.name+"] ! Durability : "+
 											Math.min(pickaxe.durability+durability, pickaxe.maxDurability).toFixed(8)+"/"+pickaxe.maxDurability.toFixed(8)+
 											" ("+(Math.min(pickaxe.durability+durability, pickaxe.maxDurability)/pickaxe.maxDurability*100).toFixed(2)+"%, +"+
-											(randDurability*100*2).toFixed(2)+"% of your investment)");
+											(randDurability*100).toFixed(2)+"% of your investment)");
 									}else{
 										client.say(nick, "You don't have enough gold");
 									}
