@@ -36,15 +36,15 @@ You can use your currencies to craft, upgrade, or repair pickaxes.
 Mining damages the equipped pickaxe.
 A pickaxe that is completely broken is **DESTROYED**, but you can repair damaged ones.
 You can invest gold to upgrade them, the quality of the upgrade is based on the amount of gold invested, same for pickaxe creation.
-I try to keep the maths of how much gold a pickaxe can mine (before repairs and upgrades) in its lifetime to roughtly double its investment, but can actually be between x0 and x4.
+I try to keep the maths of how much gold a pickaxe can mine (before repairs and upgrades) in its lifetime to roughly double its investment, but can actually be between x0 and x4.
 So due to randomness, a pickaxe have a small chance to actually mine less gold than how much you invested on it
 - Creating a pickaxe gives it `random()*investment*4` power and `random()*investment` max durability, so an investment of 1 gold will create a pickaxe that lives in average for one day and will mine in average 2 gold (can greatly vary)
 - Upgrading a pickaxe adds `random()*investment*4` to its power and `random()*investment` to max durability, but does not repair it
-- Repairing a pickaxe restores `random()*investment` durability points, limited by the max durability (so you will have to pay roughtly 1 gold each day to keep it `NOT DESTROYED`, and it can be much less or much more depending on how lucky you are)
+- Repairing a pickaxe restores `random()*investment` durability points, limited by the max durability (so you will have to pay roughly 1 gold each day to keep it `NOT DESTROYED`, and it can be much less or much more depending on how lucky you are)
 - Mining subtracts `random()*delta` to the durability, where delta represent the number of days since last mining as a floating point (so you can lose between zero and one durability point per day, depending on how lucky you are)
 - Mining gives `random()*power*delta` more gold (it adds to the normal "punch mining")
 
-#### Short version : Investing 1 gold will create a pickaxe that mines 0 to 4 gold per day, for 0 to ??? days (VERY ROUGHTLY).
+#### Short version : Investing 1 gold will create a pickaxe that mines 0 to 4 gold per day, for 0 to ??? days (roughly).
 
 ### Pickaxes creation
 Command : `create pickaxe INVESTMENT NAME`
@@ -75,7 +75,7 @@ Shows detailed description of your equiped pickaxe
 
 ### Show delta
 Command : `show delta` or `delta`
-Shows the time since that last mining. Use this to be sure you won't break your pickaxe
+Shows the time since the last mining. Use this to be sure you won't break your pickaxe. You can't do much if that's the case for now anyway.
 
 ## Planned features
 
