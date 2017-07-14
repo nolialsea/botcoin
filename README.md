@@ -94,11 +94,11 @@ Economy needs ways to spend gold, here are some solutions :
 
 ### Leveling
 You can invest gold and time to gain experience.  
-`level INVESTMENT` or `lvl INVESTMENT`  
-Leveling **COUNT AS A MINING** since it takes time (it updates your lastMining), but does not give you gold.
-You gain `INVESTMENT*random()*delta` experience when executing the command.  
+`train INVESTMENT` to train and `level` or `lvl` to display your level  
+Training **COUNT AS A MINING** since it takes time (it updates your lastMining), but does not give you gold.
+You gain `INVESTMENT*random()*delta` levels when doing a training.  
 Your level allows you to :
-- Increase your base power
+- Increase your base power when hand mining (does not affect pickaxe)
 - Increase your daily mining bonus (see super mining)
 
 ### Super mining ( Daily mining )
