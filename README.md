@@ -85,27 +85,27 @@ Shows the time since the last mining. Use this to be sure you won't break your p
 ## Planned features
 
 ### Economy update
-Be able to give/receive money to/from others.  
+Be able to give/receive money to/from other players.  
 Sell/buy pickaxes ? Causes an issue with the "one pickaxe per player" rule.  
 Economy needs ways to spend gold, here are some solutions :  
 - Enchantments : invest a lot of gold to have a small chance of succeeding enchanting your pickaxe (see enchantments)
 - Gamble : invest gold and sometimes get much more gold, but the rest of the time you always lose. (see gambling)
 - Pickaxe upgrade (already implemented)
-- Leveling : invest gold to have a better "hand mining" power (see leveling)  
+- Leveling : invest gold to level up and gain bonuses (see leveling)  
 
 ### Leveling
 You can invest gold and time to gain experience.  
 `level INVESTMENT` or `lvl INVESTMENT`  
-Leveling **COUNT AS A MINING** since it takes time (as it updates your lastMining), but does not give you gold.
+Leveling **COUNT AS A MINING** since it takes time (it updates your lastMining), but does not give you gold.
 You gain `INVESTMENT*random()*delta` experience when executing the command.  
 Your level allows you to :
 - Increase your base "hand mining"
-- Increase your "super mining" bonus (see super mining)
+- Increase your daily mining bonus (see super mining)
 
-### Super mining
+### Super mining ( Daily mining )
 Command : `supermine`  
 Its a mining that you can use **once a day** (from 00:00:00 to 23:59:59), but it does not count as a normal mining (does not update lastMining).  
-Upgraded by leveling.
+It gives you `level*random()` gold.
 
 ### Enchantments
 You can invest gold to have a chance of enchanting your pickaxe.  
@@ -114,8 +114,6 @@ Enchantments ideas :
 - [UNIQUE] Double hit : Gives `(sigmoid(ENCHANT_POWER)-0.5)*200`% chance of hitting two times with the pickaxe when mining, second it have power reduced by half, but damages are applied only on the first hit.  
 ENCHANT_POWER is `INVESTMENT*random()`
 - [EXAMPLE] Glow in the light : Useless
-- 
-
 
 ### Guilds
 Find allies to mine with !  
