@@ -85,9 +85,9 @@ Shows the time since the last mining. Use this to be sure you won't break your p
 ## Planned features
 
 ### Economy update
-Be able to give/receive money to/from others.
-Sell/buy pickaxes ? Causes an issue with the "one pickaxe per player" rule.
-Economy needs ways to spend gold, here are some solutions :
+Be able to give/receive money to/from others.  
+Sell/buy pickaxes ? Causes an issue with the "one pickaxe per player" rule.  
+Economy needs ways to spend gold, here are some solutions :  
 - Enchantments : invest a lot of gold to have a small chance of succeeding enchanting your pickaxe (see enchantments)
 - Gamble : invest gold and sometimes get much more gold, but the rest of the time you always lose. (see gambling)
 
@@ -95,16 +95,16 @@ Economy needs ways to spend gold, here are some solutions :
 Stored in runes ? Runes ?
 
 ### Guilds
-Find allies to mine with !
-Mining while being part of a guild makes everyone share a percentage of their mining gains with others. This allows a more regular income, and better progression of the less wealthier.
-Guilds also have the possibility to impose a tax on members, giving a percentage of the gold mined by every member to the guild.
-Taxes gold earned by the guild can only be used on guild upgrades (they still have to be defined).
+Find allies to mine with !  
+Mining while being part of a guild makes everyone share a percentage of their mining gains with others. This allows a more regular income, and better progression of the less wealthier.  
+Guilds also have the possibility to impose a tax on members, giving a percentage of the gold mined by every member to the guild.  
+Taxes gold earned by the guild can only be used on guild upgrades (they still have to be defined).  
 
 ### Gambling
-Gamble your money and lose it like real men.
-We can imagine many mini games for that, it's still largely up to debate.
-Mini games ideas :
-- `gamble INVESTMENT MULTIPLICATOR`, where CHANCES is a positive integer greater than one.
+Gamble your money and lose it like real men.  
+We can imagine many mini games for that, it's still largely up to debate.  
+Mini games ideas :  
+- `gamble INVESTMENT MULTIPLICATOR`, where CHANCES is a positive integer greater than one.  
 So `gamble 0.1 10` will give you 1 gold 1/10 times, the 9/10 others you will lose 0.1
 - `randomize INVESTMENT` will give you `INVESTMENT*random()*2` gold.
 
