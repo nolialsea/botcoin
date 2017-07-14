@@ -90,7 +90,6 @@ Sell/buy pickaxes ? Causes an issue with the "one pickaxe per player" rule.
 Economy needs ways to spend gold, here are some solutions :  
 - Enchantments : invest a lot of gold to have a small chance of succeeding enchanting your pickaxe (see enchantments)
 - Gamble : invest gold and sometimes get much more gold, but the rest of the time you always lose. (see gambling)
-- Pickaxe upgrade (already implemented)
 - Leveling : invest gold to level up and gain bonuses (see leveling)  
 
 ### Leveling
@@ -130,7 +129,9 @@ So `gamble 0.1 10` will give you 1 gold 1/10 times, the 9/10 others you will los
 - `randomize INVESTMENT` will give you `INVESTMENT*random()*2` gold.
 
 ### PvP/PvE events
-Zombies attack, general melee, arena, duels, you can go wild on this one
+Zombies attack, general melee, arena, duels, you can go wild on this one  
+- [PvE] Army of the dead  
+Random PvE event that sends a message in the channel to warn players that, during X minutes, they can use the `kill zombies` command **once** to fight with their pickaxes (only pickaxes damages count, you do not want to fight zombies with bare hands). At the end of the event, all players that participated are recompensed with gold, proportional to the total damages they did (totalDamage/nbPlayer gold).
 
 ## Potential features
 At first the bot was going to only be a fun currency mining tool without much usefulness for a very small IRC community, but why not as well make it a whole IRC game.
