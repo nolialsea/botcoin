@@ -98,7 +98,7 @@ You can invest gold and time to gain experience.
 Leveling **COUNT AS A MINING** since it takes time (it updates your lastMining), but does not give you gold.
 You gain `INVESTMENT*random()*delta` experience when executing the command.  
 Your level allows you to :
-- Increase your base "hand mining"
+- Increase your base power
 - Increase your daily mining bonus (see super mining)
 
 ### Super mining ( Daily mining )
@@ -133,10 +133,9 @@ Zombies attack, general melee, arena, duels, you can go wild on this one
 - [PvE] Army of the dead  
 Random PvE event that sends a message in the channel to warn players that, during X minutes, they can use the `kill zombies` command **once** to fight with their pickaxes (only pickaxes damages count, you do not want to fight zombies with bare hands). At the end of the event, all players that participated are recompensed with gold, proportional to the total damage they did (totalDamage/nbPlayer gold).
 - [PvP] Bar fight  
-Random PvP event that sends a message in the channel to warn players that, during X minutes, they can use the `bar fight` command **once** to fight with their bare hands. At the end of the event, the players that participated and did the most damage is recompensed with gold, proportional to the total damage dealth in the bar fight.
+Random PvP event that sends a message in the channel to warn players that, during X minutes, they can use the `bar fight` command **once** to fight with their bare hands. At the end of the event, the players that participated and did the most damage is recompensed with gold, proportional to the total damage dealth in the bar fight. Level bonuses applies for hand fighting.
 
 ## Potential features
-At first the bot was going to only be a fun currency mining tool without much usefulness for a very small IRC community, but why not as well make it a whole IRC game.
 
 ### World map
 Explore, travel, find dungeons, slay dragons, fuck princesses.
