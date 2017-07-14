@@ -69,13 +69,13 @@ Command : `repair INVESTMENT`
 Repairing a pickaxe adds `random()*INVESTMENT*3` to its durability, but is limited by the max durability of the pickaxe. Excess investment is **LOST**
 `INVESTMENT` should be a positive floating number, so `0.42`, `42` and `.42` have a correct format
 
+### Show pickaxe
+Command : `pickaxe` or `pick`
+Shows detailed description of your equiped pickaxe
+
 ### Show gold
 Command : `gold`
 Simply shows you how much gold you have.
-
-### Show pickaxe
-Command : `pickaxe`
-Shows detailed description of your equiped pickaxe
 
 ### Show delta
 Command : `delta`
