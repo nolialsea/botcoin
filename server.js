@@ -28,8 +28,8 @@ let client = new irc.Client(cfg.ircServer, cfg.nickname, {
 	encoding: ''
 });
 
-User.disconnectAll();
-console.log('All clients have been disconnected'.underline.red);
+/*User.disconnectAll();
+console.log('All clients have been disconnected'.underline.red);*/
 
 let command = {
 	//Connection (example command)
@@ -339,7 +339,7 @@ let command = {
 	},
 	//Show pickaxe
 	showPickaxe: function(nick, msg){
-		let reg = new RegExp("^pickaxe","i")
+		let reg = new RegExp("^pick(axe)?","i")
 		let res = msg.match(reg);
 		if (res){
 			User.getByNick(nick, function(user){
