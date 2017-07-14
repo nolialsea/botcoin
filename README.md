@@ -1,6 +1,7 @@
 # BotCoin
 IRC bot that allows to mine worthless virtual gold, designed specifically for the #CBNA
 
+This page will change as new features are implemented or defined on paper, so make sure to take a look often
 The project is still WIP, you can submit ideas for new features here : https://github.com/nolialsea/botcoin/issues/1
 
 ## Current features
@@ -83,14 +84,32 @@ Shows the time since the last mining. Use this to be sure you won't break your p
 
 ## Planned features
 
-### Trading
-Be able to give and receive money from others.
-Sell/buy pickaxes ?
-Up to debate.
+### Economy update
+Be able to give/receive money to/from others.
+Sell/buy pickaxes ? Causes an issue with the "one pickaxe per player" rule.
+Economy needs ways to spend gold, here are some solutions :
+- Enchantments : invest a lot of gold to have a small chance of succeeding enchanting your pickaxe (see enchantments)
+- Gamble : invest gold and sometimes get much more gold, but the rest of the time you always lose. (see gambling)
+
+### Enchantments
+Stored in runes ? Runes ?
+
+### Guilds
+Find allies to mine with !
+Mining while being part of a guild makes everyone share a percentage of their mining gains with others. This allows a more regular income, and better progression of the less wealthier.
+Guilds also have the possibility to impose a tax on members, giving a percentage of the gold mined by every member to the guild.
+Taxes gold earned by the guild can only be used on guild upgrades (they still have to be defined).
 
 ### Gambling
 Gamble your money and lose it like real men.
 We can imagine many mini games for that, it's still largely up to debate.
+Mini games ideas :
+- `gamble INVESTMENT MULTIPLICATOR`, where CHANCES is a positive integer greater than one.
+So `gamble 0.1 10` will give you 1 gold 1/10 times, the 9/10 others you will lose 0.1
+- `randomize INVESTMENT` will give you `INVESTMENT*random()*2` gold.
+
+### PvP/PvE events
+Zombies attack, general melee, arena, duels, you can go wild on this one
 
 ## Potential features
 At first the bot was going to only be a fun currency mining tool without much usefulness for a very small IRC community, but why not as well make it a whole IRC game.
@@ -100,16 +119,6 @@ Explore, travel, find dungeons, slay dragons, fuck princesses.
 You may explore the map tile by tile, but also modify it('s description).
 Tiles can have stats like `goldRatio`, `monsterLevel`, `isDungeon`...
 
-### PvP/PvE events
-Zombies attack, general melee, arena, duels, you can go wild on this one
-
-### Guilds
-Find allies to mine with !
-Mining while being part of a guild makes everyone share a percentage of their mining gains with others. This allows a more regular income, and better progression of the less wealthier.
-Guilds also have the possibility to impose a tax on members, giving a percentage of the gold mined by every member to the guild.
-Taxes gold earned by the guild can only be used on guild upgrades (they still have to be defined).
-
-
 ### Web interface
 Access and manage your account from the web
 I don't like this idea so much, since this project is an IRC bot...
@@ -118,5 +127,5 @@ But just a general overview of what happens would be cool to have, especially if
 ### Slaves
 They mine or repair you pickaxe automatically for you !
 Maybe you can craft them a pickaxe too ?
-Send them to missions ?
+Send them on missions ?
 They will most probably die anyway.
