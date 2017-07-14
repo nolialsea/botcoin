@@ -70,6 +70,10 @@ Command : `repair INVESTMENT`
 Repairing a pickaxe adds `random()*INVESTMENT*3` to its durability, but is limited by the max durability of the pickaxe. Excess investment is **LOST**
 `INVESTMENT` should be a positive floating number, so `0.42`, `42` and `.42` have a correct format
 
+### Show pickaxe
+Command : `pickaxe` or `pick`  
+Shows detailed description of your equiped pickaxe
+
 ### Leveling
 You can invest gold and time to gain experience.  
 `train INVESTMENT` to train and `level` or `lvl` to display your level  
@@ -79,17 +83,13 @@ Your level allows you to :
 - Increase your base power when hand mining (does not affect pickaxe)
 - Increase your daily mining bonus (see super mining, not implemented yet)
 
-### Show pickaxe
-Command : `pickaxe` or `pick`  
-Shows detailed description of your equiped pickaxe
+### Show delta
+Command : `delta`  
+Shows the time since the last mining. Use this to be sure you won't break your pickaxe.
 
 ### Show gold
 Command : `gold`  
 Simply shows you how much gold you have.
-
-### Show delta
-Command : `delta`  
-Shows the time since the last mining. Use this to be sure you won't break your pickaxe.
 
 ## Planned features
 
