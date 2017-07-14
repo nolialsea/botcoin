@@ -70,6 +70,15 @@ Command : `repair INVESTMENT`
 Repairing a pickaxe adds `random()*INVESTMENT*3` to its durability, but is limited by the max durability of the pickaxe. Excess investment is **LOST**
 `INVESTMENT` should be a positive floating number, so `0.42`, `42` and `.42` have a correct format
 
+### Leveling
+You can invest gold and time to gain experience.  
+`train INVESTMENT` to train and `level` or `lvl` to display your level  
+Training **COUNT AS A MINING** since it takes time (it updates your lastMining), but does not give you gold.
+You gain `INVESTMENT*random()*delta` levels when doing a training.  
+Your level allows you to :
+- Increase your base power when hand mining (does not affect pickaxe)
+- Increase your daily mining bonus (see super mining, not implemented yet)
+
 ### Show pickaxe
 Command : `pickaxe` or `pick`
 Shows detailed description of your equiped pickaxe
@@ -92,14 +101,6 @@ Economy needs ways to spend gold, here are some solutions :
 - Gamble : invest gold and sometimes get much more gold, but the rest of the time you always lose. (see gambling)
 - Leveling : invest gold to level up and gain bonuses (see leveling)  
 
-### Leveling
-You can invest gold and time to gain experience.  
-`train INVESTMENT` to train and `level` or `lvl` to display your level  
-Training **COUNT AS A MINING** since it takes time (it updates your lastMining), but does not give you gold.
-You gain `INVESTMENT*random()*delta` levels when doing a training.  
-Your level allows you to :
-- Increase your base power when hand mining (does not affect pickaxe)
-- Increase your daily mining bonus (see super mining)
 
 ### Super mining ( Daily mining )
 Command : `supermine`  
