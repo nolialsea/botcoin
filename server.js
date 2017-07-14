@@ -28,8 +28,18 @@ let client = new irc.Client(cfg.ircServer, cfg.nickname, {
 	encoding: ''
 });
 
-/*User.disconnectAll();
-console.log('All clients have been disconnected'.underline.red);*/
+if (cfg.debug){
+	User.disconnectAll();
+	console.log('All clients have been disconnected'.underline.red);
+}
+
+function output(to, message){
+	client.say(to, message);
+}
+
+function sigmoid(t) {
+    return 1/(1+Math.pow(Math.E, -t))+0.5;
+}
 
 let command = {
 	//Connection (example command)
@@ -47,19 +57,19 @@ let command = {
 					let password = res[2];
 					User.connect(nick, login, password, function(connected){
 						if (connected === 2){
-							client.say(nick, "Yep. Connected.");
+							output(nick, "Yep. Connected.");
 						}else if(connected === 1){
-							client.say(nick, "That account is already connected.");
+							output(nick, "That account is already connected.");
 						}else if(connected === 0){
-							client.say(nick, "Nope. Bad password.");
+							output(nick, "Nope. Bad password.");
 						}else if (connected === -1){
-							client.say(nick, "Nope. No account with this login");
+							output(nick, "Nope. No account with this login");
 						}else{
-							client.say(nick, "Wtf ?! You shouldn't see this, that's clearly a bug.");
+							output(nick, "Wtf ?! You shouldn't see this, that's clearly a bug.");
 						}
 					});
 				}else{
-					client.say(nick, "Nope. You don't use it correctly. Maybe try the \"connect help\" command ?");
+					output(nick, "Nope. You don't use it correctly. Maybe try the \"connect help\" command ?");
 				}
 			}
 
@@ -69,9 +79,9 @@ let command = {
 			if (res){
 				User.getByNick(nick, function(user){
 					if (!user){
-						client.say(nick, "Nope, you are not connected.");
+						output(nick, "Nope, you are not connected.");
 					}else{
-						client.say(nick, "Yep, you are connected.");
+						output(nick, "Yep, you are connected.");
 					}
 				});
 			}
@@ -80,7 +90,7 @@ let command = {
 			reg = new RegExp("^connect help","i")
 			res = msg.match(reg);
 			if (res){
-				client.say(nick, "https://github.com/nolialsea/botcoin");
+				output(nick, "https://github.com/nolialsea/botcoin");
 			}
 			return true; //Return true if command is found
 		}
@@ -99,20 +109,20 @@ let command = {
 					let password = res[2];
 					User.register(nick, login, password, function(registered){
 						if (registered){
-							client.say(nick, "Yep. Registered and connected.");
+							output(nick, "Yep. Registered and connected.");
 						}else{
-							client.say(nick, "Nope. Somebody already have this login or something.");
+							output(nick, "Nope. Somebody already have this login or something.");
 						}
 					});
 				}else{
-					client.say(nick, "Nope. You don't use it correctly. Maybe try the \"register help\" command ?");
+					output(nick, "Nope. You don't use it correctly. Maybe try the \"register help\" command ?");
 				}
 			}
 			
 			reg = new RegExp("^register help","i")
 			res = msg.match(reg);
 			if (res){
-				client.say(nick, "https://github.com/nolialsea/botcoin");
+				output(nick, "https://github.com/nolialsea/botcoin");
 			}
 			return true; //Return true if command is found
 		}
@@ -125,14 +135,14 @@ let command = {
 		if (res){
 			User.getByNick(nick, function(user){
 				if (user === undefined){
-					client.say(nick, "You are not connected");
+					output(nick, "You are not connected");
 				}else{
 					Pickaxe.getByUserId(user.id, function(pickaxe){
 						const delta = Math.floor(Date.now()/1000) - user.lastMining;
 						//Mining
 						if (delta >= cfg.minimumDelta || true){	//Mininum mining delta disabled for now
 							const rand = Math.random();
-							const gold = rand * (delta/86400);	//Max 1 per day
+							const gold = rand * (delta/86400) * user.level;	//Max 1 per day at lvl 1
 
 							let pickaxeRand;
 							let pickaxeGold;
@@ -141,7 +151,7 @@ let command = {
 							
 							User.addGold(nick, gold);
 							User.updateLastMining(nick);
-							client.say(nick, "You mined for "+(delta/60).toFixed(2)+" minute(s) at "+(rand*100).toFixed(2)+"% rate, earning "+gold.toFixed(8)+" gold !");
+							output(nick, "You mined for "+(delta/60).toFixed(2)+" minute(s) at "+(rand*100).toFixed(2)+"% rate, earning "+gold.toFixed(8)+" gold !");
 
 							// Pickaxe
 							if (pickaxe){
@@ -155,22 +165,22 @@ let command = {
 								// Destroyed pickaxe
 								if (pickaxe.durability-damage <= 0){
 									Pickaxe.delete(user.id);
-									client.say(nick, "Your pickaxe broke before you finished and gold has been lost ! Be more careful next time");
+									output(nick, "Your pickaxe broke before you finished and gold has been lost ! Be more careful next time");
 								}
 								//Pickaxe mining
 								else{
 									User.addGold(nick, pickaxeGold);
 									Pickaxe.addToTotalGoldMined(user.id, pickaxeGold);
-									client.say(nick, "["+pickaxe.name+"] was used to dig, earning "+pickaxeGold.toFixed(8)+" more gold at "+(pickaxeRand*100).toFixed(2)+"% rate and "+pickaxe.power.toFixed(8)+" power")
-									client.say(nick, "Your pickaxe lost "+damage.toFixed(8)+" durability at "+(damageRand*100).toFixed(2)+"% damage rate. Durability left : "+((pickaxe.durability-damage)/pickaxe.maxDurability*100).toFixed(2)+"%"+
+									output(nick, "["+pickaxe.name+"] was used to dig, earning "+pickaxeGold.toFixed(8)+" more gold at "+(pickaxeRand*100).toFixed(2)+"% rate and "+pickaxe.power.toFixed(8)+" power")
+									output(nick, "Your pickaxe lost "+damage.toFixed(8)+" durability at "+(damageRand*100).toFixed(2)+"% damage rate. Durability left : "+((pickaxe.durability-damage)/pickaxe.maxDurability*100).toFixed(2)+"%"+
 									", "+((pickaxe.durability-damage)*24*60).toFixed(2)+" minute(s) of mining remaining minimum");
 								}
 							}
-							client.say(nick, "You now have "+(user.gold+gold+(pickaxe?pickaxe.durability-damage>0?pickaxeGold:0:0)).toFixed(8)+" gold (+"+(gold+(!pickaxe?0:pickaxe.durability-damage<=0?0:pickaxeGold)).toFixed(8)+")");
+							output(nick, "You now have "+(user.gold+gold+(pickaxe?pickaxe.durability-damage>0?pickaxeGold:0:0)).toFixed(8)+" gold (+"+(gold+(!pickaxe?0:pickaxe.durability-damage<=0?0:pickaxeGold)).toFixed(8)+")");
 						}
 						//Too soon
 						else{
-							client.say(nick, "You cannot mine yet. Try again in "+(cfg.minimumDelta-delta)+" seconds.");
+							output(nick, "You cannot mine yet. Try again in "+(cfg.minimumDelta-delta)+" seconds.");
 						}
 					});
 				}
@@ -199,23 +209,23 @@ let command = {
 								const randDurability = Math.random();
 								const durability = randDurability*investment;
 								Pickaxe.create(user.id, name, power, durability, investment);
-								client.say(nick, "You created ["+name+"] ! Power : "+power.toFixed(8)+" ("+(randPower*100*4).toFixed(2)+"% of your investment) | Max durability : "+durability.toFixed(8)+" ("+(randDurability*100).toFixed(2)+"% of your investment)");
+								output(nick, "You created ["+name+"] ! Power : "+power.toFixed(8)+" ("+(randPower*100*4).toFixed(2)+"% of your investment) | Max durability : "+durability.toFixed(8)+" ("+(randDurability*100).toFixed(2)+"% of your investment)");
 							}else{
-								client.say(nick, "You don't have enough gold");
+								output(nick, "You don't have enough gold");
 							}
 						}else{
-							client.say(nick, "You are not connected.");
+							output(nick, "You are not connected.");
 						}
 					});
 				}else{
-					client.say(nick, "Nope. You don't use it correctly. Maybe try the \"create help\" command ?");
+					output(nick, "Nope. You don't use it correctly. Maybe try the \"create help\" command ?");
 				}
 			}
 			
 			reg = new RegExp("^create help","i")
 			res = msg.match(reg);
 			if (res){
-				client.say(nick, "https://github.com/nolialsea/botcoin");
+				output(nick, "https://github.com/nolialsea/botcoin");
 			}
 			return true; //Return true if command is found
 		}
@@ -242,32 +252,32 @@ let command = {
 										const randDurability = Math.random();
 										const durability = randDurability*investment;
 										Pickaxe.upgrade(user.id, power, durability, investment);
-										client.say(nick, 
+										output(nick, 
 											"You upgrade ["+pickaxe.name+"] ! New power : "+(pickaxe.power+power).toFixed(8)+
 											" (+"+power.toFixed(8)+", or "+(randPower*100*4).toFixed(2)+
 											"% of your investment) | New max durability : "+(pickaxe.maxDurability+durability).toFixed(8)+
 											" (+"+(randDurability*100).toFixed(2)+"% of your investment), minimum "+(pickaxe.durability*24*60).toFixed(2)+" minute(s) of mining remaining)"
 										);
 									}else{
-										client.say(nick, "You don't have enough gold");
+										output(nick, "You don't have enough gold");
 									}
 								}else{
-									client.say(nick, "You don't have a pickaxe");
+									output(nick, "You don't have a pickaxe");
 								}
 							});
 						}else{
-							client.say(nick, "You are not connected.");
+							output(nick, "You are not connected.");
 						}
 					});
 				}else{
-					client.say(nick, "Nope. You don't use it correctly. Maybe try the \"upgrade help\" command ?");
+					output(nick, "Nope. You don't use it correctly. Maybe try the \"upgrade help\" command ?");
 				}
 			}
 			
 			reg = new RegExp("^upgrade help","i")
 			res = msg.match(reg);
 			if (res){
-				client.say(nick, "https://github.com/nolialsea/botcoin");
+				output(nick, "https://github.com/nolialsea/botcoin");
 			}
 			return true; //Return true if command is found
 		}
@@ -292,30 +302,30 @@ let command = {
 										const randDurability = Math.random()*3;
 										const durability = randDurability*investment;
 										Pickaxe.repair(user.id, durability, investment);
-										client.say(nick, "You repaired ["+pickaxe.name+"] ! Durability : "+
+										output(nick, "You repaired ["+pickaxe.name+"] ! Durability : "+
 											Math.min(pickaxe.durability+durability, pickaxe.maxDurability).toFixed(8)+"/"+pickaxe.maxDurability.toFixed(8)+
 											" ("+(Math.min(pickaxe.durability+durability, pickaxe.maxDurability)/pickaxe.maxDurability*100).toFixed(2)+"%, +"+
 											(randDurability*100).toFixed(2)+"% of your investment), "+((pickaxe.durability+durability)*24*60).toFixed(2)+" minute(s) of mining remaining minimum)");
 									}else{
-										client.say(nick, "You don't have enough gold");
+										output(nick, "You don't have enough gold");
 									}
 								}else{
-									client.say(nick, "You don't have a pickaxe");
+									output(nick, "You don't have a pickaxe");
 								}
 							});
 						}else{
-							client.say(nick, "You are not connected.");
+							output(nick, "You are not connected.");
 						}
 					});
 				}else{
-					client.say(nick, "Nope. You don't use it correctly. Maybe try the \"repair help\" command ?");
+					output(nick, "Nope. You don't use it correctly. Maybe try the \"repair help\" command ?");
 				}
 			}
 			
 			reg = new RegExp("^repair help","i")
 			res = msg.match(reg);
 			if (res){
-				client.say(nick, "https://github.com/nolialsea/botcoin");
+				output(nick, "https://github.com/nolialsea/botcoin");
 			}
 			return true; //Return true if command is found
 		}
@@ -328,9 +338,9 @@ let command = {
 		if (res){
 			User.getByNick(nick, function(user){
 				if (!user){
-					client.say(nick, "You are not connected");
+					output(nick, "You are not connected");
 				}else{
-					client.say(nick, "You have "+user.gold.toFixed(8)+" gold");
+					output(nick, "You have "+user.gold.toFixed(8)+" gold");
 				}
 			});
 			return true; //Return true if command is found
@@ -344,19 +354,19 @@ let command = {
 		if (res){
 			User.getByNick(nick, function(user){
 				if (!user){
-					client.say(nick, "You are not connected");
+					output(nick, "You are not connected");
 				}else{
 					Pickaxe.getByUserId(user.id, function(pickaxe){
 						if (!pickaxe){
-							client.say(nick, "You don't have a pickaxe");
+							output(nick, "You don't have a pickaxe");
 						}else{
-							client.say(nick, "["+pickaxe.name+"]\tPower: "+pickaxe.power.toFixed(8)+
+							output(nick, "["+pickaxe.name+"]\tPower: "+pickaxe.power.toFixed(8)+
 								"\tDurability: "+pickaxe.durability.toFixed(8)+"/"+pickaxe.maxDurability.toFixed(8)+
 								" ("+(pickaxe.durability/pickaxe.maxDurability*100).toFixed(2)+
 								"%, "+(pickaxe.durability*24*60).toFixed(2)+" minute(s) of mining remaining minimum)");
-							client.say(nick, "Upgrades: "+pickaxe.upgrade+"\tRepairs: "+pickaxe.repair);
-							client.say(nick, "Total gold mined: "+pickaxe.totalGoldMined.toFixed(8));
-							client.say(nick, "Total investment: "+pickaxe.totalInvestment.toFixed(8));
+							output(nick, "Upgrades: "+pickaxe.upgrade+"\tRepairs: "+pickaxe.repair);
+							output(nick, "Total gold mined: "+pickaxe.totalGoldMined.toFixed(8));
+							output(nick, "Total investment: "+pickaxe.totalInvestment.toFixed(8));
 						}
 					});
 				}
@@ -372,10 +382,10 @@ let command = {
 		if (res){
 			User.getByNick(nick, function(user){
 				if (!user){
-					client.say(nick, "You are not connected");
+					output(nick, "You are not connected");
 				}else{
 					const delta = Math.floor(Date.now()/1000) - user.lastMining;
-					client.say(nick, "Last mining was "+(delta/60).toFixed(2)+" minutes ago");
+					output(nick, "Last mining was "+(delta/60).toFixed(2)+" minutes ago");
 				}
 			});
 			return true; //Return true if command is found
@@ -387,7 +397,24 @@ let command = {
 		let reg = new RegExp("^help","i")
 		let res = msg.match(reg);
 		if (res){
-			client.say(nick, "https://github.com/nolialsea/botcoin");
+			output(nick, "https://github.com/nolialsea/botcoin");
+			return true; //Return true if command is found
+		}
+		return false;	//Return false if command is not found
+	},
+	//Show level
+	showLevel: function(nick, msg){
+		let reg = new RegExp("^l(e)?v(e)?l","i")
+		let res = msg.match(reg);
+		if (res){
+			User.getByNick(nick, function(user){
+				if (!user){
+					output(nick, "You are not connected");
+				}else{
+
+					output(nick, "You are level "+user.level.toFixed(8));
+				}
+			});
 			return true; //Return true if command is found
 		}
 		return false;	//Return false if command is not found
@@ -404,7 +431,7 @@ client.addListener('pm', function (nick, message) {
 client.addListener('join', function (channel, nick, message) {
 	console.log(nick + ' joined');
 	if (nick === cfg.nickname){
-		//client.say(cfg.channels[0], "Type \"/msg "+cfg.nickname+" help\" to know more about me.");
+		//output(cfg.channels[0], "Type \"/msg "+cfg.nickname+" help\" to know more about me.");
 	}
 
 });
