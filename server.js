@@ -265,7 +265,7 @@ let command = {
 								if (pickaxe){
 									if (user.gold >= investment){
 										User.addGold(nick, -investment);
-										const randDurability = Math.random()*2;
+										const randDurability = Math.random()*3;
 										const durability = randDurability*investment;
 										Pickaxe.repair(user.id, durability, investment);
 										client.say(nick, "You repaired ["+pickaxe.name+"] ! Durability : "+
