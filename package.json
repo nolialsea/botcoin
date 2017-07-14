@@ -21,6 +21,7 @@
   "dependencies": {
     "sqlite3": "*",
     "irc": "*",
-    "md5": "*"
+    "md5": "*",
+    "colors": "*"
   }
 }

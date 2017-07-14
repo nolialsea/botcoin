@@ -2,6 +2,7 @@ const irc = require('irc');
 const cfg = require('configuration');
 const User = require('user');
 const Pickaxe = require('pickaxe');
+const colors = require('colors');
 
 let client = new irc.Client(cfg.ircServer, cfg.nickname, {
 	port: cfg.ircPort,
@@ -27,6 +28,9 @@ let client = new irc.Client(cfg.ircServer, cfg.nickname, {
 	encoding: ''
 });
 
+User.disconnectAll();
+console.log('All clients have been disconnected'.underline.red);
+
 let command = {
 	//Connection (example command)
 	connect: function(nick, msg){
@@ -35,24 +39,44 @@ let command = {
 		let res = msg.match(reg);
 		if (res){
 			//Second regex can then extract arguments and process them however
-			reg = new RegExp("^connect ([^ ]{1,32}) ([^ ]{1,32}$)","i")
+			reg = new RegExp("^connect ([^ ]*) ([^ ]*$)","i")
 			res = msg.match(reg);
 			if (res){
 				if (res.length === 3){
 					let login = res[1];
 					let password = res[2];
 					User.connect(nick, login, password, function(connected){
-						if (connected){
+						if (connected === 2){
 							client.say(nick, "Yep. Connected.");
+						}else if(connected === 1){
+							client.say(nick, "That account is already connected.");
+						}else if(connected === 0){
+							client.say(nick, "Nope. Bad password.");
+						}else if (connected === -1){
+							client.say(nick, "Nope. No account with this login");
 						}else{
-							client.say(nick, "Nope. Bad password or something.");
+							client.say(nick, "Wtf ?! You shouldn't see this, that's clearly a bug.");
 						}
 					});
 				}else{
 					client.say(nick, "Nope. You don't use it correctly. Maybe try the \"connect help\" command ?");
 				}
 			}
+
 			//You can also match different arguments
+			reg = new RegExp("^connected","i");
+			res = msg.match(reg);
+			if (res){
+				User.getByNick(nick, function(user){
+					if (!user){
+						client.say(nick, "Nope, you are not connected.");
+					}else{
+						client.say(nick, "Yep, you are connected.");
+					}
+				});
+			}
+
+			//Help
 			reg = new RegExp("^connect help","i")
 			res = msg.match(reg);
 			if (res){
@@ -382,10 +406,12 @@ client.addListener('join', function (channel, nick, message) {
 	if (nick === cfg.nickname){
 		//client.say(cfg.channels[0], "Type \"/msg "+cfg.nickname+" help\" to know more about me.");
 	}
+
 });
 
 client.addListener('names', function (channel, nicks) {
 	console.log('NAMES : ['+Object.keys(nicks).join(', ')+']');
+
 });
 
 client.addListener('nick', function(oldNick, newNick, channels, message) {
