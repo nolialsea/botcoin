@@ -97,9 +97,17 @@ At first the bot was going to only be a fun currency mining tool without much us
 
 ### World map
 Explore, travel, find dungeons, slay dragons, fuck princesses.
+You may explore the map tile by tile, but also modify it('s description).
+Tiles can have stats like `goldRatio`, `monsterLevel`, `isDungeon`...
 
 ### PvP/PvE events
 Zombies attack, general melee, arena, duels, you can go wild on this one
+
+### Guilds
+Find allies to mine !
+Mining while being part of a guild makes everyone share a percentage of their gains with others. This allows a more regular income, and better progression of the less wealthier.
+Guilds also have the possibility to impose a tax on members, giving a percentage of the gold mined by every member to the guild.
+The tax money can only be used on guild upgrades.
 
 ### Web interface
 Access and manage your account from the web
