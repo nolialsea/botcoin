@@ -80,16 +80,16 @@ Your level allows you to :
 - Increase your daily mining bonus (see super mining, not implemented yet)
 
 ### Show pickaxe
-Command : `pickaxe` or `pick`
+Command : `pickaxe` or `pick`  
 Shows detailed description of your equiped pickaxe
 
 ### Show gold
-Command : `gold`
+Command : `gold`  
 Simply shows you how much gold you have.
 
 ### Show delta
-Command : `delta`
-Shows the time since the last mining. Use this to be sure you won't break your pickaxe. You can't do much if that's the case for now anyway.
+Command : `delta`  
+Shows the time since the last mining. Use this to be sure you won't break your pickaxe.
 
 ## Planned features
 
