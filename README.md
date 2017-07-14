@@ -10,7 +10,7 @@ This is to avoid unnecessary spamming on the main channel, and give it a more "g
 I plan to use the channel only for events announcement, pvp and pve, but not "solo" commands or notifications. 
 
 ### Show help
-Command : `help` or `show help`
+Command : `help`
 Send you the link to this page. Deal with it
 
 ### Register
@@ -47,7 +47,7 @@ So due to randomness, a pickaxe have a small chance to actually mine less gold t
 #### Short version : Investing 1 gold will create a pickaxe that mines 0 to 4 gold per day, for 0 to ??? days (roughly).
 
 ### Pickaxes creation
-Command : `create pickaxe INVESTMENT NAME`
+Command : `create INVESTMENT NAME`
 Creating a pickaxe gives it `random()*INVESTMENT*4` power and `random()*INVESTMENT` max durability, so an investment of 1 gold will create a pickaxe that lives in average for one day and will mine in average 2 gold
 `INVESTMENT` is the amount of gold you want to spend to forge this pickaxe, it should be a positive floating number
 `INVESTMENT` should be a positive floating number, so `0.42`, `42` and `.42` have a correct format
@@ -55,26 +55,26 @@ NAME can be 32 characters long and contain pretty much any character, even space
 You can only have one pickaxe, and creating a new one will **DELETE** the previous
 
 ### Pickaxe upgrade
-Command : `upgrade pickaxe INVESTMENT`
+Command : `upgrade INVESTMENT`
 Upgrading a pickaxe adds `random()*INVESTMENT*4` to its power and `random()*INVESTMENT` to max durability, but does not repair it
 `INVESTMENT` should be a positive floating number, so `0.42`, `42` and `.42` have a correct format
 Pickaxes keep track of how many upgrades they have... I may or may not use it later
 
 ### Pickaxe repair
-Command : `repair pickaxe INVESTMENT`
+Command : `repair INVESTMENT`
 Repairing a pickaxe adds `random()*INVESTMENT*3` to its durability, but is limited by the max durability of the pickaxe. Excess investment is **LOST**
 `INVESTMENT` should be a positive floating number, so `0.42`, `42` and `.42` have a correct format
 
 ### Show gold
-Command : `show gold` or `gold`
+Command : `gold`
 Simply shows you how much gold you have.
 
 ### Show pickaxe
-Command : `show pickaxe` or `pickaxe`
+Command : `pickaxe`
 Shows detailed description of your equiped pickaxe
 
 ### Show delta
-Command : `show delta` or `delta`
+Command : `delta`
 Shows the time since the last mining. Use this to be sure you won't break your pickaxe. You can't do much if that's the case for now anyway.
 
 ## Planned features
