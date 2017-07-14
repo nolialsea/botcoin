@@ -24,6 +24,10 @@ Connect to an existing account.
 You will need to reconnect basically after each time you quit the channel
 You keep the connection even when you change your nick
 
+### Connected
+Command : `connected`
+Tells you if you are connected or not
+
 ### Mine
 Command : `mine`
 Mine `random()*delta` gold, where delta is the number of days since the last mining (or registration) as a floating point.
