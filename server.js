@@ -157,10 +157,10 @@ let command = {
 	},
 	//Create pickaxe
 	createPickaxe: function(nick, msg){
-		let reg = new RegExp("^create pickaxe","i")
+		let reg = new RegExp("^create","i")
 		let res = msg.match(reg);
 		if (res){
-			reg = new RegExp("^create pickaxe (([0-9]*[.])?[0-9]+) ([^]*)","i");
+			reg = new RegExp("^create (([0-9]*[.])?[0-9]+) ([^]*)","i");
 			res = msg.match(reg);
 			if (res){
 				if (res.length === 4){
@@ -184,11 +184,11 @@ let command = {
 						}
 					});
 				}else{
-					client.say(nick, "Nope. You don't use it correctly. Maybe try the \"create pickaxe help\" command ?");
+					client.say(nick, "Nope. You don't use it correctly. Maybe try the \"create help\" command ?");
 				}
 			}
 			
-			reg = new RegExp("^create pickaxe help","i")
+			reg = new RegExp("^create help","i")
 			res = msg.match(reg);
 			if (res){
 				client.say(nick, "https://github.com/nolialsea/botcoin");
@@ -199,10 +199,10 @@ let command = {
 	},
 	//Upgrade pickaxe
 	upgradePickaxe: function(nick, msg){
-		let reg = new RegExp("^upgrade pickaxe","i")
+		let reg = new RegExp("^upgrade","i")
 		let res = msg.match(reg);
 		if (res){
-			reg = new RegExp("^upgrade pickaxe (([0-9]*[.])?[0-9]+)","i");
+			reg = new RegExp("^upgrade (([0-9]*[.])?[0-9]+)","i");
 			res = msg.match(reg);
 			if (res){
 				if (res.length === 3){
@@ -236,11 +236,11 @@ let command = {
 						}
 					});
 				}else{
-					client.say(nick, "Nope. You don't use it correctly. Maybe try the \"upgrade pickaxe help\" command ?");
+					client.say(nick, "Nope. You don't use it correctly. Maybe try the \"upgrade help\" command ?");
 				}
 			}
 			
-			reg = new RegExp("^upgrade pickaxe help","i")
+			reg = new RegExp("^upgrade help","i")
 			res = msg.match(reg);
 			if (res){
 				client.say(nick, "https://github.com/nolialsea/botcoin");
@@ -251,10 +251,10 @@ let command = {
 	},
 	//Repair pickaxe
 	repairPickaxe: function(nick, msg){
-		let reg = new RegExp("^repair pickaxe","i")
+		let reg = new RegExp("^repair","i")
 		let res = msg.match(reg);
 		if (res){
-			reg = new RegExp("^repair pickaxe (([0-9]*[.])?[0-9]+)","i");
+			reg = new RegExp("^repair (([0-9]*[.])?[0-9]+)","i");
 			res = msg.match(reg);
 			if (res){
 				if (res.length === 3){
@@ -284,11 +284,11 @@ let command = {
 						}
 					});
 				}else{
-					client.say(nick, "Nope. You don't use it correctly. Maybe try the \"repair pickaxe help\" command ?");
+					client.say(nick, "Nope. You don't use it correctly. Maybe try the \"repair help\" command ?");
 				}
 			}
 			
-			reg = new RegExp("^repair pickaxe help","i")
+			reg = new RegExp("^repair help","i")
 			res = msg.match(reg);
 			if (res){
 				client.say(nick, "https://github.com/nolialsea/botcoin");
@@ -299,7 +299,7 @@ let command = {
 	},
 	//Display gold
 	showGold: function(nick, msg){
-		let reg = new RegExp("^(show )?gold","i")
+		let reg = new RegExp("^gold","i")
 		let res = msg.match(reg);
 		if (res){
 			User.getByNick(nick, function(user){
@@ -315,7 +315,7 @@ let command = {
 	},
 	//Show pickaxe
 	showPickaxe: function(nick, msg){
-		let reg = new RegExp("^(show )?pickaxe","i")
+		let reg = new RegExp("^pickaxe","i")
 		let res = msg.match(reg);
 		if (res){
 			User.getByNick(nick, function(user){
@@ -343,7 +343,7 @@ let command = {
 	},
 	//Show delta
 	showDelta: function(nick, msg){
-		let reg = new RegExp("^(show )?delta","i")
+		let reg = new RegExp("^delta","i")
 		let res = msg.match(reg);
 		if (res){
 			User.getByNick(nick, function(user){
@@ -360,7 +360,7 @@ let command = {
 	},
 	//Show help
 	showHelp: function(nick, msg){
-		let reg = new RegExp("^(show )?help","i")
+		let reg = new RegExp("^help","i")
 		let res = msg.match(reg);
 		if (res){
 			client.say(nick, "https://github.com/nolialsea/botcoin");
