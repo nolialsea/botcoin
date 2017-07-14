@@ -11,12 +11,12 @@ I plan to use the channel only for events announcement, pvp and pve, but not "so
 
 ### Show help
 Command : `help`
-Send you the link to this page. Deal with it
+Send you the link to this page. I don't want to write a command line documentation since everything is here, so yeah, deal with it.
 
 ### Register
 Command : `register LOGIN PASSWORD`
-Register a new account and connect to it automatically. You should only do it once.  
-The password is badly encrypted in md5, not even salted, so don't use your usual passwords.
+Register a new account and connect to it automatically. You should only do it once.
+The password is badly encrypted in md5, not even salted, so don't use your usual passwords (maybe i will salt it some day, but not much more).
 
 ### Connect
 Command : `connect LOGIN PASSWORD`
