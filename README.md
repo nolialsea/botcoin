@@ -104,10 +104,11 @@ Tiles can have stats like `goldRatio`, `monsterLevel`, `isDungeon`...
 Zombies attack, general melee, arena, duels, you can go wild on this one
 
 ### Guilds
-Find allies to mine !
-Mining while being part of a guild makes everyone share a percentage of their gains with others. This allows a more regular income, and better progression of the less wealthier.
+Find allies to mine with !
+Mining while being part of a guild makes everyone share a percentage of their mining gains with others. This allows a more regular income, and better progression of the less wealthier.
 Guilds also have the possibility to impose a tax on members, giving a percentage of the gold mined by every member to the guild.
-The tax money can only be used on guild upgrades.
+Taxes gold earned by the guild can only be used on guild upgrades (they still have to be defined).
+
 
 ### Web interface
 Access and manage your account from the web
