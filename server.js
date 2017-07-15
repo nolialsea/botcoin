@@ -460,8 +460,11 @@ let command = {
 					if (res){
 						const investment = res[1];
 						if (user.gold >= investment){
-							User.addGold(nick, -investment);
-							User.addGold(nick, investment*Math.random()*2);
+							const rand = Math.random();
+							const ratio = (rand*2)-1;
+							const gain = -investment + investment*rand*2;
+							User.addGold(nick, gain);
+							output(nick, "You invested "+investment.toFixed(8)+"g and gained "+gain.toFixed(8)+"g ("+ (ratio < 0 ? "" : "+") +(ratio*100).toFixed(8)+"%)");
 						}else{
 							output(nick, "You don't have enough gold.");
 						}
