@@ -458,13 +458,14 @@ let command = {
 					reg = new RegExp("^randomize (([0-9]*[.])?[0-9]+)","i");
 					res = msg.match(reg);
 					if (res){
-						const investment = res[1];
+						const investment = parseFloat(res[1]);
 						if (user.gold >= investment){
 							const rand = Math.random();
 							const ratio = (rand*2)-1;
 							const gain = -investment + investment*rand*2;
 							User.addGold(nick, gain);
-							output(nick, "You invested "+investment.toFixed(8)+"g and gained "+gain.toFixed(8)+"g ("+ (ratio < 0 ? "" : "+") +(ratio*100).toFixed(8)+"%)");
+							output(nick, "You " + (ratio < 0 ? "lost" : "won " ) + " " +
+							 Math.abs(gain).toFixed(8)+ " gold ("+ (ratio < 0 ? "" : "+") + (ratio*100).toFixed(2)+"% of investment) You now have "+(user.gold+gain).toFixed(8)+" gold");
 						}else{
 							output(nick, "You don't have enough gold.");
 						}
