@@ -18,7 +18,7 @@ let client = new irc.Client(cfg.ircServer, cfg.nickname, {
 	selfSigned: false,
 	certExpired: false,
 	floodProtection: true,
-	floodProtectionDelay: 500,
+	floodProtectionDelay: cfg.floodProtectionDelay,
 	sasl: false,
 	retryCount: 0,
 	retryDelay: 2000,
@@ -404,7 +404,6 @@ let command = {
 				if (!user){
 					output(nick, "You are not connected");
 				}else{
-
 					output(nick, "You are level "+user.level.toFixed(8));
 				}
 			});
@@ -440,7 +439,35 @@ let command = {
 						}
 					}else{
 						output(nick, "You use it wrong. Look at https://github.com/nolialsea/botcoin for more information");
+					}
+				}
+			});
+			return true; //Return true if command is found
+		}
+		return false;	//Return false if command is not found
+	},
+	//Randomize investment
+	randomize: function(nick, msg){
+		let reg = new RegExp("^randomize","i")
+		let res = msg.match(reg);
+		if (res){
+			User.getByNick(nick, function(user){
+				if (user === undefined){
+					output(nick, "You are not connected");
+				}else{
+					reg = new RegExp("^randomize (([0-9]*[.])?[0-9]+)","i");
+					res = msg.match(reg);
+					if (res){
+						const investment = res[1];
+						if (user.gold >= investment){
+							User.addGold(nick, -investment);
+							User.addGold(nick, investment*Math.random()*2);
+						}else{
+							output(nick, "You don't have enough gold.");
 						}
+					}else{
+						output(nick, "You use it wrong. Look at https://github.com/nolialsea/botcoin for more information");
+					}
 				}
 			});
 			return true; //Return true if command is found
