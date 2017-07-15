@@ -139,49 +139,42 @@ let command = {
 				}else{
 					Pickaxe.getByUserId(user.id, function(pickaxe){
 						const delta = Math.floor(Date.now()/1000) - user.lastMining;
-						//Mining
-						if (delta >= cfg.minimumDelta || true){	//Mininum mining delta disabled for now
-							const rand = Math.random();
-							const gold = rand * (delta/86400) * user.level;	//Max 1 per day at lvl 1
+						const rand = Math.random();
+						const gold = rand * (delta/86400) * user.level;	//Max 1 per day at lvl 1
 
-							let pickaxeRand;
-							let pickaxeGold;
-							let damageRand;
-							let damage;
+						//Hand mining
+						User.addGold(nick, gold);
+						User.updateLastMining(nick);
+						output(nick, "You mined for "+(delta/60).toFixed(2)+" minute(s) at "+(rand*100).toFixed(2)+"% rate, earning "+gold.toFixed(8)+" gold !");
+
+						// Pickaxe mining
+						let pickaxeRand;
+						let pickaxeGold;
+						let damageRand;
+						let damage;
+						if (pickaxe){
+							pickaxeRand = Math.random();
+							pickaxeGold = pickaxeRand * (delta/86400) * pickaxe.power;
+							damageRand = Math.random();
+							damage = damageRand * (delta/86400);
+
+							Pickaxe.damage(user.id, damage);
 							
-							User.addGold(nick, gold);
-							User.updateLastMining(nick);
-							output(nick, "You mined for "+(delta/60).toFixed(2)+" minute(s) at "+(rand*100).toFixed(2)+"% rate, earning "+gold.toFixed(8)+" gold !");
-
-							// Pickaxe
-							if (pickaxe){
-								pickaxeRand = Math.random();
-								pickaxeGold = pickaxeRand * (delta/86400) * pickaxe.power;
-								damageRand = Math.random();
-								damage = damageRand * (delta/86400);
-
-								Pickaxe.damage(user.id, damage);
-								
-								// Destroyed pickaxe
-								if (pickaxe.durability-damage <= 0){
-									Pickaxe.delete(user.id);
-									output(nick, "Your pickaxe broke before you finished and gold has been lost ! Be more careful next time");
-								}
-								//Pickaxe mining
-								else{
-									User.addGold(nick, pickaxeGold);
-									Pickaxe.addToTotalGoldMined(user.id, pickaxeGold);
-									output(nick, "["+pickaxe.name+"] was used to dig, earning "+pickaxeGold.toFixed(8)+" more gold at "+(pickaxeRand*100).toFixed(2)+"% rate and "+pickaxe.power.toFixed(8)+" power")
-									output(nick, "Your pickaxe lost "+damage.toFixed(8)+" durability at "+(damageRand*100).toFixed(2)+"% damage rate. Durability left : "+((pickaxe.durability-damage)/pickaxe.maxDurability*100).toFixed(2)+"%"+
-									", "+((pickaxe.durability-damage)*24*60).toFixed(2)+" minute(s) of mining remaining minimum");
-								}
+							// Destroyed pickaxe
+							if (pickaxe.durability-damage <= 0){
+								Pickaxe.delete(user.id);
+								output(nick, "Your pickaxe broke before you finished and gold has been lost ! Be more careful next time");
 							}
-							output(nick, "You now have "+(user.gold+gold+(pickaxe?pickaxe.durability-damage>0?pickaxeGold:0:0)).toFixed(8)+" gold (+"+(gold+(!pickaxe?0:pickaxe.durability-damage<=0?0:pickaxeGold)).toFixed(8)+")");
+							//Pickaxe mining
+							else{
+								User.addGold(nick, pickaxeGold);
+								Pickaxe.addToTotalGoldMined(user.id, pickaxeGold);
+								output(nick, "["+pickaxe.name+"] was used to dig, earning "+pickaxeGold.toFixed(8)+" more gold at "+(pickaxeRand*100).toFixed(2)+"% rate and "+pickaxe.power.toFixed(8)+" power")
+								output(nick, "Your pickaxe lost "+damage.toFixed(8)+" durability at "+(damageRand*100).toFixed(2)+"% damage rate. Durability left : "+((pickaxe.durability-damage)/pickaxe.maxDurability*100).toFixed(2)+"%"+
+								", "+((pickaxe.durability-damage)*24*60).toFixed(2)+" minute(s) of mining remaining minimum");
+							}
 						}
-						//Too soon
-						else{
-							output(nick, "You cannot mine yet. Try again in "+(cfg.minimumDelta-delta)+" seconds.");
-						}
+						output(nick, "You now have "+(user.gold+gold+(pickaxe?pickaxe.durability-damage>0?pickaxeGold:0:0)).toFixed(8)+" gold (+"+(gold+(!pickaxe?0:pickaxe.durability-damage<=0?0:pickaxeGold)).toFixed(8)+")");
 					});
 				}
 			});
@@ -413,6 +406,41 @@ let command = {
 				}else{
 
 					output(nick, "You are level "+user.level.toFixed(8));
+				}
+			});
+			return true; //Return true if command is found
+		}
+		return false;	//Return false if command is not found
+	},
+	//Training
+	train: function(nick, msg){
+		let reg = new RegExp("^train","i")
+		let res = msg.match(reg);
+		if (res){
+			User.getByNick(nick, function(user){
+				if (user === undefined){
+					output(nick, "You are not connected");
+				}else{
+					reg = new RegExp("^train (([0-9]*[.])?[0-9]+)","i");
+					res = msg.match(reg);
+					if (res){
+						const investment = res[1];
+						const delta = Math.floor(Date.now()/1000) - user.lastMining;
+						const rand = Math.random();
+						const experience = rand*(delta/86400)*investment;
+
+						if (user.gold >= investment){
+							User.addGold(nick, -investment);
+							User.addLevel(nick, experience);
+							User.updateLastMining(nick);
+							output(nick, "You trained for "+(delta/60).toFixed(2)+" minute(s) at "+(rand*100).toFixed(2)+"% rate, earning "+experience.toFixed(8)+" level(s) !");
+							output(nick, "You are now level "+(user.level+experience).toFixed(8));
+						}else{
+							output(nick, "You don't have enough gold.");
+						}
+					}else{
+						output(nick, "You use it wrong. Look at https://github.com/nolialsea/botcoin for more information");
+						}
 				}
 			});
 			return true; //Return true if command is found
