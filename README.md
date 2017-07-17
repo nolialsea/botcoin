@@ -44,36 +44,36 @@ Tells you if you are connected or not
 
 ### Mine
 Command : `mine`  
-Mine `random()*delta*playerLevel` gold, where delta is the number of days since the last mining (or registration) as a floating point.
-Basically, you will earn between 0 and 1 gold per day with your bare hands (at level 1 without pickaxe, pickaxes allows to mine more)
-Using this command only computes the gold you earned since the last mining, it "updates" your wallet if you prefer, but does not allow to earn more so spamming it is useless.
+Mine `random()*delta*playerLevel` gold, where delta is the number of days since the last mining (or registration) as a floating point.  
+Basically, you will earn between 0 and 1 gold per day with your bare hands (at level 1 without pickaxe, pickaxes allows to mine more)  
+Using this command only computes the gold you earned since the last mining, it "updates" your wallet if you prefer, but does not allow to earn more so spamming it is useless.  
 Mining damages your pickaxe if you have one. If the pickaxe break during the mining, the gold that should have been mined by the pickaxe is lost.
 
 ### Pickaxes
-You can use your currencies to craft, upgrade, or repair pickaxes.
-Mining damages the equipped pickaxe proportionnally to its power (`random()*delta*damageRatio`).
-A pickaxe that is completely broken is **DESTROYED**, but you can repair damaged ones.
-You can invest gold to upgrade them, the quality of the upgrade is based on the amount of gold invested, same for pickaxe creation.
-I try to keep the maths of how much gold a pickaxe can mine (before repairs and upgrades) in its lifetime to roughly double its investment.
+You can use your currencies to craft, upgrade, or repair pickaxes.  
+Mining damages the equipped pickaxe proportionnally to its power (`random()*delta*damageRatio`).  
+A pickaxe that is completely broken is **DESTROYED**, but you can repair damaged ones.  
+You can invest gold to upgrade them, the quality of the upgrade is based on the amount of gold invested, same for pickaxe creation.  
+I try to keep the maths of how much gold a pickaxe can mine (before repairs and upgrades) in its lifetime to roughly double its investment.  
 So due to randomness, a pickaxe have a small chance to actually mine less gold than how much you invested on it
 
 ### Pickaxes creation
-Command : `create INVESTMENT NAME`
-Creating a pickaxe gives it `random()*INVESTMENT*creationPowerRatio` power and `random()*INVESTMENT*creationMaxDurabilityRatio` max durability.
-`INVESTMENT` is the amount of gold you want to spend to forge this pickaxe, it should be a positive floating number
-`INVESTMENT` should be a positive floating number, so `0.42`, `42` and `.42` have a correct format
-NAME can be 32 characters long and contain pretty much any character, even spaces
+Command : `create INVESTMENT NAME`  
+Creating a pickaxe gives it `random()*INVESTMENT*creationPowerRatio` power and `random()*INVESTMENT*creationMaxDurabilityRatio` max durability.  
+`INVESTMENT` is the amount of gold you want to spend to forge this pickaxe, it should be a positive floating number  
+`INVESTMENT` should be a positive floating number, so `0.42`, `42` and `.42` have a correct format  
+NAME can be 32 characters long and contain pretty much any character, even spaces  
 You can only have one pickaxe, and creating a new one will **DELETE** the previous
 
 ### Pickaxe upgrade
-Command : `upgrade INVESTMENT`
-Upgrading a pickaxe adds `random()*INVESTMENT*upgradePowerRatio` to its power and `random()*INVESTMENT*upgradeMaxDurabilityRatio` to max durability, but does not repair it
+Command : `upgrade INVESTMENT`  
+Upgrading a pickaxe adds `random()*INVESTMENT*upgradePowerRatio` to its power and   `random()*INVESTMENT*upgradeMaxDurabilityRatio` to max durability, but does not repair it  
 `INVESTMENT` should be a positive floating number, so `0.42`, `42` and `.42` have a correct format
 Pickaxes keep track of how many upgrades they have... I may or may not use it later
 
 ### Pickaxe repair
-Command : `repair INVESTMENT`
-Repairing a pickaxe adds `random()*INVESTMENT*repairRatio` to its durability, but is limited by the max durability of the pickaxe. Excess investment is **LOST**
+Command : `repair INVESTMENT`  
+Repairing a pickaxe adds `random()*INVESTMENT*repairRatio` to its durability, but is limited by the max durability of the pickaxe. Excess investment is **LOST**  
 `INVESTMENT` should be a positive floating number, so `0.42`, `42` and `.42` have a correct format
 
 ### Show pickaxe
@@ -85,7 +85,7 @@ You can invest gold and time to gain experience.
 `train` to train and `level` or `lvl` to display your level  
 Training **COUNT AS A MINING** since it takes time (it updates your lastMining), but does not give you gold.
 You gain `random()*delta` levels when doing a training.  
-Your level allows you to :
+Your level allows you to :  
 - Increase your base power when hand mining (does not affect pickaxe)
 - Increase your daily mining bonus (see super mining, not implemented yet)
 
