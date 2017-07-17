@@ -156,7 +156,7 @@ let command = {
 							pickaxeRand = Math.random();
 							pickaxeGold = pickaxeRand * (delta/86400) * pickaxe.power;
 							damageRand = Math.random();
-							damage = damageRand * (delta/86400) * pickaxe.power;
+							damage = damageRand * (delta/86400) * pickaxe.power * cfg.damageRatio;
 
 							Pickaxe.damage(user.id, damage);
 							
@@ -201,7 +201,7 @@ let command = {
 								const randDurability = Math.random();
 								const durability = randDurability*investment*cfg.creationMaxDurabilityRatio;
 								Pickaxe.create(user.id, name, power, durability, investment);
-								output(nick, "You created ["+name+"] ! Power : "+power.toFixed(8)+" ("+(randPower*100*cgf.creationPowerRatio).toFixed(2)+"% of your investment) | Max durability : "+durability.toFixed(8)+" ("+(randDurability*100*cfg.creationMaxDurabilityRatio).toFixed(2)+"% of your investment)");
+								output(nick, "You created ["+name+"] ! Power : "+power.toFixed(8)+" ("+(randPower*100*cfg.creationPowerRatio).toFixed(2)+"% of your investment) | Max durability : "+durability.toFixed(8)+" ("+(randDurability*100*cfg.creationMaxDurabilityRatio).toFixed(2)+"% of your investment)");
 							}else{
 								output(nick, "You don't have enough gold");
 							}
@@ -354,7 +354,8 @@ let command = {
 						}else{
 							output(nick, "["+pickaxe.name+"]\tPower: "+pickaxe.power.toFixed(8)+
 								"\tDurability: "+pickaxe.durability.toFixed(8)+"/"+pickaxe.maxDurability.toFixed(8)+
-								" ("+(pickaxe.durability/pickaxe.maxDurability*100).toFixed(2)+"%");
+								" ("+(pickaxe.durability/pickaxe.maxDurability*100).toFixed(2)+"%, " +
+								(pickaxe.durability/pickaxe.power*24*2*cfg.damageRatio).toFixed(2)+"h in average, minimum "+(pickaxe.durability/pickaxe.power*24*cfg.damageRatio).toFixed(2)+"h)" );
 							output(nick, "Upgrades: "+pickaxe.upgrade+"\tRepairs: "+pickaxe.repair);
 							output(nick, "Total gold mined: "+pickaxe.totalGoldMined.toFixed(8));
 							output(nick, "Total investment: "+pickaxe.totalInvestment.toFixed(8));
