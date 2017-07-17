@@ -19,31 +19,31 @@ The project is still WIP, you can submit ideas for new features here : https://g
 - Damage ratio : 0.5
 
 ### Commands are all PMs now !
-There will be some channel commands to trade, show how much gold you have, show your pickaxe, etc, but frequent commands will be PM only.
-This is to avoid unnecessary spamming on the main channel, and give it a more "gaming" feeling.
+There will be some channel commands to trade, show how much gold you have, show your pickaxe, etc, but frequent commands will be PM only.  
+This is to avoid unnecessary spamming on the main channel, and give it a more "gaming" feeling.  
 I plan to use the channel only for events announcement, pvp and pve, but not "solo" commands or notifications. 
 
 ### Show help
-Command : `help`
+Command : `help`  
 Send you the link to this page. I don't want to write a command line documentation since everything is here, so yeah, deal with it.
 
 ### Register
-Command : `register LOGIN PASSWORD`
-Register a new account and connect to it automatically. You should only do it once.
+Command : `register LOGIN PASSWORD`  
+Register a new account and connect to it automatically. You should only do it once.  
 The password is badly encrypted in md5, not even salted, so don't use your usual passwords (maybe i will salt it some day, but not much more).
 
 ### Connect
-Command : `connect LOGIN PASSWORD`
-Connect to an existing account.
-You will need to reconnect basically after each time you quit the channel
+Command : `connect LOGIN PASSWORD`  
+Connect to an existing account.  
+You will need to reconnect basically after each time you quit the channel  
 You keep the connection even when you change your nick
 
 ### Connected
-Command : `connected`
+Command : `connected`  
 Tells you if you are connected or not
 
 ### Mine
-Command : `mine`
+Command : `mine`  
 Mine `random()*delta*playerLevel` gold, where delta is the number of days since the last mining (or registration) as a floating point.
 Basically, you will earn between 0 and 1 gold per day with your bare hands (at level 1 without pickaxe, pickaxes allows to mine more)
 Using this command only computes the gold you earned since the last mining, it "updates" your wallet if you prefer, but does not allow to earn more so spamming it is useless.
