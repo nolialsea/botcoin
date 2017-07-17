@@ -83,7 +83,7 @@ Shows detailed description of your equiped pickaxe
 ### Leveling
 You can invest gold and time to gain experience.  
 Commands : `train` to train and `level` or `lvl` to display your level  
-Training **COUNT AS A MINING** since it takes time (it updates your lastMining), but does not give you gold.
+Training **COUNT AS A MINING** since it takes time (it updates your lastMining), but does not give you gold.  
 You gain `random()*delta` levels when doing a training.  
 Your level allows you to :  
 - Increase your base power when hand mining (does not affect pickaxe)
