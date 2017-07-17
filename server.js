@@ -156,7 +156,7 @@ let command = {
 							pickaxeRand = Math.random();
 							pickaxeGold = pickaxeRand * (delta/86400) * pickaxe.power;
 							damageRand = Math.random();
-							damage = damageRand * (delta/86400);
+							damage = damageRand * (delta/86400) * pickaxe.power;
 
 							Pickaxe.damage(user.id, damage);
 							
@@ -170,8 +170,7 @@ let command = {
 								User.addGold(nick, pickaxeGold);
 								Pickaxe.addToTotalGoldMined(user.id, pickaxeGold);
 								output(nick, "["+pickaxe.name+"] was used to dig, earning "+pickaxeGold.toFixed(8)+" more gold at "+(pickaxeRand*100).toFixed(2)+"% rate and "+pickaxe.power.toFixed(8)+" power")
-								output(nick, "Your pickaxe lost "+damage.toFixed(8)+" durability at "+(damageRand*100).toFixed(2)+"% damage rate. Durability left : "+((pickaxe.durability-damage)/pickaxe.maxDurability*100).toFixed(2)+"%"+
-								", "+((pickaxe.durability-damage)*24*60).toFixed(2)+" minute(s) of mining remaining minimum");
+								output(nick, "Your pickaxe lost "+damage.toFixed(8)+" durability at "+(damageRand*100).toFixed(2)+"% damage rate. Durability left : "+((pickaxe.durability-damage)/pickaxe.maxDurability*100).toFixed(2)+"%");
 							}
 						}
 						output(nick, "You now have "+(user.gold+gold+(pickaxe?pickaxe.durability-damage>0?pickaxeGold:0:0)).toFixed(8)+" gold (+"+(gold+(!pickaxe?0:pickaxe.durability-damage<=0?0:pickaxeGold)).toFixed(8)+")");
@@ -198,11 +197,11 @@ let command = {
 							if (user.gold >= investment){
 								User.addGold(nick, -investment);
 								const randPower = Math.random();
-								const power = randPower*investment*4;
+								const power = randPower*investment*cfg.creationPowerRatio;
 								const randDurability = Math.random();
-								const durability = randDurability*investment;
+								const durability = randDurability*investment*cfg.creationMaxDurabilityRatio;
 								Pickaxe.create(user.id, name, power, durability, investment);
-								output(nick, "You created ["+name+"] ! Power : "+power.toFixed(8)+" ("+(randPower*100*4).toFixed(2)+"% of your investment) | Max durability : "+durability.toFixed(8)+" ("+(randDurability*100).toFixed(2)+"% of your investment)");
+								output(nick, "You created ["+name+"] ! Power : "+power.toFixed(8)+" ("+(randPower*100*cgf.creationPowerRatio).toFixed(2)+"% of your investment) | Max durability : "+durability.toFixed(8)+" ("+(randDurability*100*cfg.creationMaxDurabilityRatio).toFixed(2)+"% of your investment)");
 							}else{
 								output(nick, "You don't have enough gold");
 							}
@@ -241,15 +240,15 @@ let command = {
 									if (user.gold >= investment){
 										User.addGold(nick, -investment);
 										const randPower = Math.random();
-										const power = randPower*investment*4;
+										const power = randPower*investment*cfg.upgradePowerRatio;
 										const randDurability = Math.random();
-										const durability = randDurability*investment;
+										const durability = randDurability*investment*cfg.upgradeMaxDurabilityRatio;
 										Pickaxe.upgrade(user.id, power, durability, investment);
 										output(nick, 
 											"You upgrade ["+pickaxe.name+"] ! New power : "+(pickaxe.power+power).toFixed(8)+
-											" (+"+power.toFixed(8)+", or "+(randPower*100*4).toFixed(2)+
+											" (+"+power.toFixed(8)+", or "+(randPower*100*cfg.upgradePowerRatio).toFixed(2)+
 											"% of your investment) | New max durability : "+(pickaxe.maxDurability+durability).toFixed(8)+
-											" (+"+(randDurability*100).toFixed(2)+"% of your investment), minimum "+(pickaxe.durability*24*60).toFixed(2)+" minute(s) of mining remaining)"
+											" (+"+(randDurability*100*cfg.upgradeMaxDurabilityRatio).toFixed(2)+"% of your investment)"
 										);
 									}else{
 										output(nick, "You don't have enough gold");
@@ -292,13 +291,13 @@ let command = {
 								if (pickaxe){
 									if (user.gold >= investment){
 										User.addGold(nick, -investment);
-										const randDurability = Math.random()*3;
-										const durability = randDurability*investment;
+										const randDurability = Math.random();
+										const durability = randDurability*investment*cfg.repairDurabilityRatio;
 										Pickaxe.repair(user.id, durability, investment);
 										output(nick, "You repaired ["+pickaxe.name+"] ! Durability : "+
 											Math.min(pickaxe.durability+durability, pickaxe.maxDurability).toFixed(8)+"/"+pickaxe.maxDurability.toFixed(8)+
 											" ("+(Math.min(pickaxe.durability+durability, pickaxe.maxDurability)/pickaxe.maxDurability*100).toFixed(2)+"%, +"+
-											(randDurability*100).toFixed(2)+"% of your investment), "+((pickaxe.durability+durability)*24*60).toFixed(2)+" minute(s) of mining remaining minimum)");
+											(randDurability*100*cfg.repairDurabilityRatio).toFixed(2)+"% of your investment)");
 									}else{
 										output(nick, "You don't have enough gold");
 									}
@@ -355,8 +354,7 @@ let command = {
 						}else{
 							output(nick, "["+pickaxe.name+"]\tPower: "+pickaxe.power.toFixed(8)+
 								"\tDurability: "+pickaxe.durability.toFixed(8)+"/"+pickaxe.maxDurability.toFixed(8)+
-								" ("+(pickaxe.durability/pickaxe.maxDurability*100).toFixed(2)+
-								"%, "+(pickaxe.durability*24*60).toFixed(2)+" minute(s) of mining remaining minimum)");
+								" ("+(pickaxe.durability/pickaxe.maxDurability*100).toFixed(2)+"%");
 							output(nick, "Upgrades: "+pickaxe.upgrade+"\tRepairs: "+pickaxe.repair);
 							output(nick, "Total gold mined: "+pickaxe.totalGoldMined.toFixed(8));
 							output(nick, "Total investment: "+pickaxe.totalInvestment.toFixed(8));
@@ -420,23 +418,17 @@ let command = {
 				if (user === undefined){
 					output(nick, "You are not connected");
 				}else{
-					reg = new RegExp("^train (([0-9]*[.])?[0-9]+)","i");
+					reg = new RegExp("^train","i");
 					res = msg.match(reg);
 					if (res){
-						const investment = res[1];
 						const delta = Math.floor(Date.now()/1000) - user.lastMining;
 						const rand = Math.random();
-						const experience = rand*(delta/86400)*investment;
+						const experience = rand*(delta/86400);
 
-						if (user.gold >= investment){
-							User.addGold(nick, -investment);
-							User.addLevel(nick, experience);
-							User.updateLastMining(nick);
-							output(nick, "You trained for "+(delta/60).toFixed(2)+" minute(s) at "+(rand*100).toFixed(2)+"% rate, earning "+experience.toFixed(8)+" level(s) !");
-							output(nick, "You are now level "+(user.level+experience).toFixed(8));
-						}else{
-							output(nick, "You don't have enough gold.");
-						}
+						User.addLevel(nick, experience);
+						User.updateLastMining(nick);
+						output(nick, "You trained for "+(delta/60).toFixed(2)+" minute(s) at "+(rand*100).toFixed(2)+"% rate, earning "+experience.toFixed(8)+" level(s) !");
+						output(nick, "You are now level "+(user.level+experience).toFixed(8));
 					}else{
 						output(nick, "You use it wrong. Look at https://github.com/nolialsea/botcoin for more information");
 					}
