@@ -111,7 +111,7 @@ Economy needs ways to spend gold, here are some solutions :
 ### Super mining ( Daily mining )
 Command : `supermine`  
 Its a mining that you can use **once a day** (from 00:00:00 to 23:59:59), but it does not count as a normal mining (does not update lastMining).  
-It gives you `level*random()` gold.
+It gives you `level*random()*playerLevel` gold.
 
 ### Enchantments
 You can invest gold to have a chance of enchanting your pickaxe.  
