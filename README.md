@@ -44,8 +44,8 @@ Tells you if you are connected or not
 
 ### Mine
 Command : `mine`
-Mine `random()*delta` gold, where delta is the number of days since the last mining (or registration) as a floating point.
-Basically, you will earn between 0 and 1 gold per day with your bare hands (pickaxes allows to mine more)
+Mine `random()*delta*playerLevel` gold, where delta is the number of days since the last mining (or registration) as a floating point.
+Basically, you will earn between 0 and 1 gold per day with your bare hands (at level 1 without pickaxe, pickaxes allows to mine more)
 Using this command only computes the gold you earned since the last mining, it "updates" your wallet if you prefer, but does not allow to earn more so spamming it is useless.
 Mining damages your pickaxe if you have one. If the pickaxe break during the mining, the gold that should have been mined by the pickaxe is lost.
 
