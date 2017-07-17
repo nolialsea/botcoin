@@ -7,13 +7,13 @@ The project is still WIP, you can submit ideas for new features here : https://g
 ## Current features
 
 ### Configurations
-Pickaxe creation :  
+#### Pickaxe creation
 - Power ratio : 3
 - Max durability ratio: 3  
-Pickaxe upgrade :  
+#### Pickaxe upgrade
 - Power ratio : 2
 - Max durability ratio : 1  
-Pickaxe repair :  
+#### Pickaxe repair
 - Durability ratio : 1
 
 ### Commands are all PMs now !
