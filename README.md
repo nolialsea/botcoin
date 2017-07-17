@@ -9,10 +9,10 @@ The project is still WIP, you can submit ideas for new features here : https://g
 ### Configurations
 Pickaxe creation :
 - Power ratio : 3
-- Max durability ratio: 3
+- Max durability ratio: 3  
 Pickaxe upgrade :
 - Power ratio : 2
-- Max durability ratio : 1
+- Max durability ratio : 1  
 Pickaxe repair :
 - Durability ratio : 1
 
