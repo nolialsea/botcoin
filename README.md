@@ -15,6 +15,8 @@ The project is still WIP, you can submit ideas for new features here : https://g
 - Max durability ratio : 1  
 #### Pickaxe repair
 - Durability ratio : 1
+#### Pickaxe damages when mining
+- Damage ratio : 0.5
 
 ### Commands are all PMs now !
 There will be some channel commands to trade, show how much gold you have, show your pickaxe, etc, but frequent commands will be PM only.
