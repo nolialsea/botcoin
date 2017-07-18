@@ -18,14 +18,6 @@ upgradeMaxDurabilityRatio | 1 |
 repairDurabilityRatio | 1 | 
 damageRatio | 0.5 | 
 
-- Power ratio : 3
-- Max durability ratio: 3  
-
-- Power ratio : 1
-- Max durability ratio : 1  
-
-- Durability ratio : 1
-
 ## Current features
 #### Pickaxe damages when mining
 - Damage ratio : 0.5
