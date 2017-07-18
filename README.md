@@ -66,7 +66,7 @@ Command : `mine`
 Mine `random()*delta*playerLevel` gold, where delta is the number of days since the last mining (or registration) as a floating point.  
 Basically, you will earn between 0 and 1 gold per day with your bare hands (at level 1 without pickaxe, pickaxes allows to mine more)  
 Using this command only computes the gold you earned since the last mining, it "updates" your wallet if you prefer, but does not allow to earn more so spamming it is useless.  
-Mining damages your pickaxe if you have one. If the pickaxe break during the mining, the gold that should have been mined by the pickaxe is lost.
+If you have a pickaxe, it will mine automatically too, earning `random()*delta*pickaxePower` taking `random()*delta*pickaxePower*damageRatio` damages. If it breaks during the mining, the gold that should have been mined by the pickaxe is lost.
 
 ### Pickaxes
 You can use your currencies to craft, upgrade, or repair pickaxes.  
@@ -93,7 +93,7 @@ Pickaxes keep track of how many upgrades they have... I may or may not use it la
 ### Pickaxe repair
 Command : `repair INVESTMENT`  
 Repairing a pickaxe adds `random()*INVESTMENT*repairRatio` to its durability, but is limited by the max durability of the pickaxe. Excess investment is **LOST**  
-`INVESTMENT` should be a positive floating number, so `0.42`, `42` and `.42` have a correct format
+`INVESTMENT` should be a positive floating number, so `0.42`, `42` and `.42` have a correct format  
 
 ### Show pickaxe
 Command : `pickaxe` or `pick`  
