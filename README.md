@@ -100,7 +100,7 @@ Command : `pickaxe` or `pick`
 Shows detailed description of your equiped pickaxe
 
 ### Leveling
-You can invest gold and time to gain experience.  
+You can invest time to gain experience.  
 Commands : `train` to train and `level` or `lvl` to display your level  
 You gain `random()*delta*levelingRate/playerLevel` levels when doing a training (it gets harder and harder to level up).  
 Training **COUNT AS A MINING** since it takes time (it updates your lastMining), but does not give you gold.  
@@ -122,13 +122,10 @@ Simply shows you how much gold you have.
 ### PvP/PvE events
 Zombies attack, general melee, arena, duels, you can go wild on this one  
 Events can be pretty much everything involving several players  
-They all have a **triggerChance**, defining how likely they are to happen each second (very low values)  
-PvE events have a **difficulty** value that define how much gold can be produced  
-
-
 For now, only two events, one PvP and one PvE =)  
 - [PvE] Army of the dead  
-Random PvE event that sends a message in the channel to warn players that, during X minutes, they can use the `kill zombies` command **once** to fight with their pickaxes (only pickaxes damages count, you do not want to fight zombies with bare hands). At the end of the event, all players that participated are recompensed with gold, proportional to the total damage they did (totalDamage/nbPlayergold*eventSize gold).
+Random PvE event that sends a message in the channel to warn players that, during X minutes, they can use the `kill zombies` command **once** to fight with their pickaxes (only pickaxes damages count, you do not want to fight zombies with bare hands).  
+At the end of the event, all players that participated are recompensed with gold, proportional to the total damage they did (`totalDamage/nbPlayergold` gold).
 - [PvP] Bar fight  
 Random PvP event that sends a message in the channel to warn players that, during X minutes, they can use the `bar fight` command **once** to fight with their bare hands. At the end of the event, the players that participated and did the most damage is recompensed with gold, proportional to the total damage dealth in the bar fight. Level bonuses applies for hand fighting.
 
