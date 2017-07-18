@@ -7,13 +7,21 @@ The project is still WIP, you can submit ideas for new features here : https://g
 ## Current features
 
 ### Configurations
-#### Pickaxe creation
+For pickaxes :  
+| creation | upgrade | repair | damage rate |  
+| --- | --- | --- | --- |  
+| 3 | 3 | NA | NA |  
+
+Power 
+Max durability
+Durability
+
 - Power ratio : 3
 - Max durability ratio: 3  
-#### Pickaxe upgrade
+
 - Power ratio : 1
 - Max durability ratio : 1  
-#### Pickaxe repair
+
 - Durability ratio : 1
 #### Pickaxe damages when mining
 - Damage ratio : 0.5
