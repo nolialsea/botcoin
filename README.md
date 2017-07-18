@@ -4,12 +4,30 @@ IRC bot that allows to mine worthless virtual gold, designed by/for the #CBNA IR
 This page will change as new features are implemented or defined on paper, so make sure to take a look often  
 The project is still WIP, you can submit ideas for new features here : https://github.com/nolialsea/botcoin/issues/1
 
+## Current variables
+### User
+Variable | Starting value | Description
+:------- | -------------: | :----------
+level | 1 | Represent your level as a floating point
+gold | 0 | The actual currency, represents your total gold in grams or whatever (it's a floating point)
+lastMining | now() | Timestamp of the last mining, used to calculate most things like mining income
 
+### Pickaxe
+Variable | Description
+:------- | :----------
+name | 
+power | Define how much gold you can find per day with this pickaxe
+maxDurability | Maximum damages the pickaxe can take before breaking
+durability | A pickaxe of 1 power can lose maximum 1 durability point per day 
+upgrade | Number of upgrades the pickaxe received
+repair | Number of repairs the pickaxe received
+totalInvestment | Total gold invested in this pickaxe
+totalGoldMined | Total gold mined by this pickaxe
 
 ## Current configurations
 
 Variable | Value | Description
-:------- | ----: | -----------
+:------- | ----: | :----------
 creationPowerRatio | 3 | Created pickaxes have `creationPowerRatio*INVESTMENT` **power**
 creationMaxDurabilityRatio | 3 | Created pickaxes have `creationMaxDurabilityRatio*INVESTMENT` **max durability**
 upgradePowerRatio | 1 | Upgrading a pickaxe adds `upgradePowerRatio*INVESTMENT` to its **power**
