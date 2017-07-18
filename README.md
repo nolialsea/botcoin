@@ -15,17 +15,16 @@ lastMining | now() | Timestamp of the last mining, used to calculate most things
 ### Pickaxe
 Variable | Description
 :------- | :----------
-name | 
-power | Define how much gold you can find per day with this pickaxe
-maxDurability | Maximum damages the pickaxe can take before breaking
-durability | A pickaxe of 1 power can lose maximum 1 durability point per day 
+name | You can name pickaxes at creation
+power | Define the maximum amount of gold you can mine per day with this pickaxe
+maxDurability | Maximum damages the pickaxe can take before breaking, cannot repair behond this value
+durability | Actual durability, can never be above maxDurability
 upgrade | Number of upgrades the pickaxe received
 repair | Number of repairs the pickaxe received
 totalInvestment | Total gold invested in this pickaxe
 totalGoldMined | Total gold mined by this pickaxe
 
 ## Current configurations
-
 Variable | Value | Description
 :------- | ----: | :----------
 creationPowerRatio | 3 | Created pickaxes have `creationPowerRatio*INVESTMENT` **power**
