@@ -20,9 +20,6 @@ delta | | Represents the time since the last mining in days as a floating point
 
 
 ## Current features
-#### Pickaxe damages when mining
-- Damage ratio : 0.5
-
 ### Commands are all PMs now !
 There will be some channel commands to trade, show how much gold you have, show your pickaxe, etc, but frequent commands will be PM only.  
 This is to avoid unnecessary spamming on the main channel, and give it a more "gaming" feeling.  
