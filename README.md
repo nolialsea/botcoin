@@ -7,16 +7,17 @@ The project is still WIP, you can submit ideas for new features here : https://g
 
 
 ## Current configurations
-For pickaxes :  
 
 Variable | Value | Description
 :------- | ----: | -----------
-creationPowerRatio | 3 | 
-creationMaxDurabilityRatio | 3 | 
-upgradePowerRatio | 1 | 
-upgradeMaxDurabilityRatio | 1 | 
-repairDurabilityRatio | 1 | 
-damageRatio | 0.5 | 
+creationPowerRatio | 3 | Created pickaxes have `creationPowerRatio*INVESTMENT` **power**
+creationMaxDurabilityRatio | 3 | Created pickaxes have `creationMaxDurabilityRatio*INVESTMENT` **max durability**
+upgradePowerRatio | 1 | Upgrading a pickaxe adds `upgradePowerRatio*INVESTMENT` to its **power**
+upgradeMaxDurabilityRatio | 1 | Upgrading a pickaxe adds `upgradePowerRatio*INVESTMENT` to its **max durability**
+repairDurabilityRatio | 1 | Repairing adds `repairDurabilityRatio*INVESTMENT` to the **durability**
+damageRatio | 0.5 | Mining damages pickaxe **durability** by `damageRatio*pickaxePower*delta`
+delta | | Represents the time since the last mining in days as a floating point
+
 
 ## Current features
 #### Pickaxe damages when mining
