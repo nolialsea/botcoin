@@ -33,8 +33,8 @@ upgradePowerRatio | 1 | Upgrading a pickaxe adds `upgradePowerRatio*INVESTMENT` 
 upgradeMaxDurabilityRatio | 1 | Upgrading a pickaxe adds `upgradePowerRatio*INVESTMENT` to its **max durability**
 repairDurabilityRatio | 1 | Repairing adds `repairDurabilityRatio*INVESTMENT` to the **durability**
 damageRatio | 0.5 | Mining damages pickaxe **durability** by `damageRatio*pickaxePower*delta`
+levelingRate | 1 | Define the leveling curve (see leveling maths)
 delta | | Represents the time since the last mining in days as a floating point
-
 
 ## Current features
 ### Commands are all PMs now !
@@ -102,8 +102,9 @@ Shows detailed description of your equiped pickaxe
 ### Leveling
 You can invest gold and time to gain experience.  
 Commands : `train` to train and `level` or `lvl` to display your level  
+You gain `random()*delta*levelingRate/playerLevel` levels when doing a training (it gets harder and harder to level up).  
 Training **COUNT AS A MINING** since it takes time (it updates your lastMining), but does not give you gold.  
-You gain `random()*delta` levels when doing a training.  
+**Small info**, i've done the maths, in 1 year of daily training (no mining at all), you will be level ~18-19, in 10 years, level ~60 =)
 Your level allows you to :  
 - Increase your base power when hand mining (does not affect pickaxe)
 - Increase your daily mining bonus (see super mining, not implemented yet)
@@ -116,8 +117,23 @@ Shows the time since the last mining. Use this to be sure you won't break your p
 Command : `gold`  
 Simply shows you how much gold you have.
 
-## Planned features
 
+## Currently in development
+### PvP/PvE events
+Zombies attack, general melee, arena, duels, you can go wild on this one  
+Events can be pretty much everything involving several players  
+They all have a **triggerChance**, defining how likely they are to happen each second (very low values)  
+PvE events have a **difficulty** value that define how much gold can be produced  
+
+
+For now, only two events, one PvP and one PvE =)  
+- [PvE] Army of the dead  
+Random PvE event that sends a message in the channel to warn players that, during X minutes, they can use the `kill zombies` command **once** to fight with their pickaxes (only pickaxes damages count, you do not want to fight zombies with bare hands). At the end of the event, all players that participated are recompensed with gold, proportional to the total damage they did (totalDamage/nbPlayergold*eventSize gold).
+- [PvP] Bar fight  
+Random PvP event that sends a message in the channel to warn players that, during X minutes, they can use the `bar fight` command **once** to fight with their bare hands. At the end of the event, the players that participated and did the most damage is recompensed with gold, proportional to the total damage dealth in the bar fight. Level bonuses applies for hand fighting.
+
+
+## Planned features
 ### Economy update
 Be able to give/receive money to/from other players.  
 Sell/buy pickaxes ? Causes an issue with the "one pickaxe per player" rule.  
@@ -154,15 +170,7 @@ Mini games ideas :
 So `gamble 0.1 10` will give you 1 gold 1/10 times, the 9/10 others you will lose 0.1
 - `randomize INVESTMENT` will give you `INVESTMENT*random()*2` gold.
 
-### PvP/PvE events
-Zombies attack, general melee, arena, duels, you can go wild on this one  
-- [PvE] Army of the dead  
-Random PvE event that sends a message in the channel to warn players that, during X minutes, they can use the `kill zombies` command **once** to fight with their pickaxes (only pickaxes damages count, you do not want to fight zombies with bare hands). At the end of the event, all players that participated are recompensed with gold, proportional to the total damage they did (totalDamage/nbPlayer gold).
-- [PvP] Bar fight  
-Random PvP event that sends a message in the channel to warn players that, during X minutes, they can use the `bar fight` command **once** to fight with their bare hands. At the end of the event, the players that participated and did the most damage is recompensed with gold, proportional to the total damage dealth in the bar fight. Level bonuses applies for hand fighting.
-
 ## Potential features
-
 ### World map
 Explore, travel, find dungeons, slay dragons, fuck princesses.
 You may explore the map tile by tile, but also modify it('s description).
