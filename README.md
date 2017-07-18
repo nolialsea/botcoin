@@ -4,17 +4,19 @@ IRC bot that allows to mine worthless virtual gold, designed by/for the #CBNA IR
 This page will change as new features are implemented or defined on paper, so make sure to take a look often  
 The project is still WIP, you can submit ideas for new features here : https://github.com/nolialsea/botcoin/issues/1
 
-## Current features
 
-### Configurations
+
+## Current configurations
 For pickaxes :  
-| creation | upgrade | repair | damage rate |  
-| --- | --- | --- | --- |  
-| 3 | 3 | NA | NA |  
 
-Power 
-Max durability
-Durability
+Variable | Value | Description
+:------- | ----: | -----------
+creationPowerRatio | 3 | 
+creationMaxDurabilityRatio | 3 | 
+upgradePowerRatio | 1 | 
+upgradeMaxDurabilityRatio | 1 | 
+repairDurabilityRatio | 1 | 
+damageRatio | 0.5 | 
 
 - Power ratio : 3
 - Max durability ratio: 3  
@@ -23,6 +25,8 @@ Durability
 - Max durability ratio : 1  
 
 - Durability ratio : 1
+
+## Current features
 #### Pickaxe damages when mining
 - Damage ratio : 0.5
 
