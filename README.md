@@ -10,7 +10,7 @@ The project is still WIP, you can submit ideas for new features here : https://g
 ## Planned features:
 - Temporal Actions : 
   - Mining redone : alone or in a group, you can go mining for a specified amount of time. Mined gold is only earned at the end, and splitted in equal parts if mining in group. Mining alone or in group changes nothing at same level/power except a better gold repartition
-  - Dungeons : same as mining but with different outcomes (less/no gold, but chances to loot pickaxes). Dungeons are dangerous, and it is recommended to go in groups
+  - Dungeons : same as mining but with different outcomes (different gold chances, chances to loot pickaxes). Dungeons are dangerous, and it is recommended to go in groups
   - Other types of "temporal action" with different outcomes (quests, adventures, dragon slaying, ...)
 - Guilds !
   - Guild tax : Guild masters can define a tax percentage. Each time a guild member earn gold, a tax is preleved and added to the guilds headquarter
