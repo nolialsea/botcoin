@@ -13,7 +13,7 @@ The project is still WIP, you can submit ideas for new features here : https://g
   - Dungeons : same as mining but with different outcomes (different gold chances, chances to loot pickaxes). Dungeons are dangerous, and it is recommended to go in groups
   - Other types of "temporal action" with different outcomes (quests, adventures, dragon slaying, ...)
 - Guilds !
-  - Guild tax : Guild masters can define a tax percentage. Each time a guild member earn gold, a tax is preleved and added to the guilds headquarter
+  - Guild tax : Guild masters can define a tax percentage. Each time a guild member earn gold, a tax is preleved and added to the guilds bank
   - HeadQuarter : When you create a guild, you basically buy a headquarter that you can upgrade to unlock bonuses. Guild members are considered in the headquarter when they are available (have no temporal action in process)
     - Bank : Tax money is stored in here. You can upgrade its max durability and repair it when damaged. Repairing it is cheapest than upgrading it
     - Defenses : They defend your headquarter during attacks, dealing damages to opponents. They do not need a player operating it, and cannot be completely destroyed
