@@ -13,7 +13,7 @@ The project is still WIP, you can submit ideas for new features here : https://g
   - Dungeons : same as mining but with different outcomes (different gold chances, chances to loot pickaxes). Dungeons are dangerous, and it is recommended to go in groups
   - Other types of "temporal action" with different outcomes (quests, adventures, dragon slaying, ...)
 - Guilds !
-  - Guild tax : Guild masters can define a tax percentage. Each time a guild member earn gold, a tax is preleved and added to the guilds bank
+  - Guild tax : Guild masters can define a tax percentage. Each time a guild member earn gold, a tax is deducted and added to the guilds bank
   - HeadQuarter : When you create a guild, you basically buy a headquarter that you can upgrade to unlock bonuses. Guild members are considered in the headquarter when they are available (have no temporal action in process)
     - Bank : Tax money is stored in here. You can upgrade its max durability and repair it when damaged. Repairing it is cheapest than upgrading it
     - Defenses : They defend your headquarter during attacks, dealing damages to opponents. They do not need a player operating it, and cannot be completely destroyed
@@ -21,7 +21,7 @@ The project is still WIP, you can submit ideas for new features here : https://g
   - Guild PvP : Guilds can attack other Guilds headquarters to steal their gold.
     - A guild master can order a war on a specified guild. Each available member then have 10 minutes to confirm that they participate
     - War machines are automatically used by attackers if enough members can operate them
-    - Defender guild automatically use defenses by every available defender guild member
+    - Defender guild automatically use all defenses
     - The war takes form of iterations, repeated until one side is defeated or surrenders.
     - During the attack, each side inflict damages at the same time, total damages is calculated by the base level of players, power of their pickaxes and power of war machines or defenses.
       - The sum of these damages is applied respectively on war machines and defenses durability if any
