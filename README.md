@@ -16,6 +16,8 @@ Actions like mining now takes time. You can specify for how much time you want t
   - Dungeons : same as mining but with different outcomes (varying gold rate, chances to loot pickaxes). Dungeons are dangerous, and it is recommended to go in groups
   - Other types of "temporal action" with different outcomes (quests, adventures, dragon slaying, ...)
 
+- Recyclable pickaxes  
+Get your money back ! Melt your useless pickaxes and retreive their power in gold
 
 - Groups
   - Create or join a group
