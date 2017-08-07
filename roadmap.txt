@@ -1,0 +1,65 @@
+/*
+	Users are represented by a Player account
+	Each user have one and only one Player
+*/
+Player:
+	login (string 32)
+	password (string 32)
+	nick (string)
+		//used to keep track of connected players, updates automatically when they change their nick
+		//when players connect, they associate their current nick to the account, allowing them to use commands
+		//they get disconnected when they quit IRC (nick becomes null)
+	gold (float default 0)
+	level (float default 1)
+	pickaxeId (integer)
+		//currently equiped
+
+/*
+	Players can have multiple pickaxes but can only use one at the same time
+	They allow to mine more gold
+	They get damaged when mining and need frequent repairs
+	power and max durability are proportional to the gold invested at creation
+*/
+Pickaxe:
+	name (string 32)
+	power (float default 1)
+	max durability (float)
+	durability (float)
+	initial investment (float)
+	repair investment (float default 0)
+	repair count (float default 0)
+	total gold mined (float default 0)
+	creatorId (PlayerId)
+	ownerId (PlayerId)
+
+/*
+	Players find loots when mining or doing most other actions
+	Loots are only claimable once after they are available
+*/
+GoldLoot:
+	temporalActionId
+	message
+	gold (float)
+	availableAt (timestamp)
+	claimed (bool)
+
+PickaxeLoot:
+	temporalActionId
+	message
+	pickaxeId
+	availableAt (timestamp)
+	claimed (bool)
+
+/*
+	Players can have only one temportal action at any time
+	It can be a mining, a dungeon, anything that takes time
+	the result of the action is defined at creation, but only claimable when the action is finished
+*/
+TemporalAction:
+	message (string)
+	startDate (timestamp)
+	duration (in sec)
+
+Event:
+	message
+	
